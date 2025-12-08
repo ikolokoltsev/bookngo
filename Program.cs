@@ -1,41 +1,49 @@
+global using MySql.Data.MySqlClient;
+using server;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
+// Start: Session koniguration, "in memory cache"
 
+// End: Session koniguration, "in memory cache"
+
+Config config = new("server=127.0.0.1;uid=bookngo;pwd=bookngo;database=bookngo;");
+builder.Services.AddSingleton(config);
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+app.MapDelete("/db", db_reset_to_default);
+
+app.MapPost("/users", async (Config config, string Name, string Email, string Password) =>
 {
-    app.MapOpenApi();
-}
+    string sql = "INSERT INTO users(name, email, password) VALUES (@name, @email, @password)";
 
-app.UseHttpsRedirection();
+    using var conn = new MySqlConnection(config.db);
+    await conn.OpenAsync();
 
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
+    using var cmd = new MySqlCommand(sql, conn);
+    cmd.Parameters.AddWithValue("@name", Name);
+    cmd.Parameters.AddWithValue("@email", Email);
+    cmd.Parameters.AddWithValue("@password", Password);
 
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast =  Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast");
+    await cmd.ExecuteNonQueryAsync();
 
+    return Results.Ok("User created!");
+});
 app.Run();
 
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
+async Task db_reset_to_default(Config config)
 {
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
+    string query_create_users_table = """
+                                      CREATE TABLE users
+                                      (
+                                        id INT PRIMARY KEY AUTO_INCREMENT,
+                                        name VARCHAR(255) NOT NULL,
+                                        password VARCHAR(255) NOT NULL,
+                                        email VARCHAR(255) NOT NULL    
+                                      )
+                                      """; 
+    await MySqlHelper.ExecuteNonQueryAsync(config.db, query_create_users_table);
 }
+
+
+
