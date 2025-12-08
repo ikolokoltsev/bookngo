@@ -16,10 +16,37 @@ builder.Services.AddSession(options =>
 Config config = new("server=127.0.0.1;uid=bookngo;pwd=bookngo;database=bookngo;");
 builder.Services.AddSingleton(config);
 var app = builder.Build();
+
 app.UseSession();
+app.MapGet("/", () => new
+{
+      status = "running",
+      endpoints = new[] {"/login", "/users", "/db"}
+      
+});
+
+
+app.MapDelete("/db", db_reset_to_default);
 
 app.MapPost("/users", Users.Post);
-app.MapDelete("/db", db_reset_to_default);
+
+// app.MapPost("/login", Login.Post);
+// app.MapGet("/login", Login.Get);
+
+app.MapPost("/login", async (Login.Post_Args creds, Config config, HttpContext ctx) =>
+{
+    bool success = await Login.Post(creds, config, ctx);
+    return success ? Results.Ok("Logged in!") : Results.Unauthorized();
+});
+
+app.MapGet("/login", async (Config config, HttpContext ctx) =>
+{
+    var user = await Login.Get(config, ctx);
+    return user != null ? Results.Ok(user) : Results.Unauthorized();
+});
+
+
+
     
 app.Run();
 
