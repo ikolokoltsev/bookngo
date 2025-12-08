@@ -27,29 +27,3 @@ Returnar true om matchar databasen & ger dig en cookie
   "status": "Logged in with cookie"
 }
 returnar [401 Unautthorized] om man försöker logga in utan Cookie i header
-
-
-
-
-
-
-## GET -------------------------------------------------------------------------------
-
-http://localhost:5218/login
-
-if(Cookie == true)
-{
-      Set-Cookie .AspNetCore.Session=CfDJ8CXcZI..........
-      ..................................................
-      .......................
-} return 
-
-{
-      "name": "Azar",
-      "email": "Azar@email.com"
-} 
-else
-{
-      null
-}
-## ----------------------------------------------------------------------------------
