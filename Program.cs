@@ -1,5 +1,6 @@
 global using MySql.Data.MySqlClient;
 using Microsoft.Extensions.Options;
+using MySqlX.XDevAPI.Common;
 using server;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -30,23 +31,38 @@ app.MapDelete("/db", db_reset_to_default);
 
 app.MapPost("/users", Users.Post);
 
-// app.MapPost("/login", Login.Post);
-// app.MapGet("/login", Login.Get);
 
+
+app.MapGet("/me", async (Config config, HttpContext ctx) =>
+{
+    var user = await Login.Get(config, ctx);
+
+    if (user == null)
+      {
+            return Results.Unauthorized(); // 401: Not autorized
+      }  
+    return Results.Ok(new
+    {
+          Name = user.Name, 
+          Email = user.Email,
+          Status = "Logged in with cookie!"
+    });
+}
+); 
+
+// app.MapPost("/login", Login.Post);
 app.MapPost("/login", async (Login.Post_Args creds, Config config, HttpContext ctx) =>
 {
     bool success = await Login.Post(creds, config, ctx);
     return success ? Results.Ok("Logged in!") : Results.Unauthorized();
 });
 
+// app.MapGet("/login", Login.Get);
 app.MapGet("/login", async (Config config, HttpContext ctx) =>
 {
     var user = await Login.Get(config, ctx);
     return user != null ? Results.Ok(user) : Results.Unauthorized();
 });
-
-
-
     
 app.Run();
 
@@ -63,6 +79,8 @@ async Task db_reset_to_default(Config config)
                                       """; 
     await MySqlHelper.ExecuteNonQueryAsync(config.db, query_create_users_table);
 }
+
+
 
 
 

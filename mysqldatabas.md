@@ -3,34 +3,36 @@ CREATE DATABASE bookngo;
 CREATE USER 'bookngo'@'localhost' IDENTIFIED BY 'bookngo';
 GRANT ALL PRIVILEGES ON bookngo.\* TO 'bookngo'@'localhost';
 
-## DELETE --------------------------------------------------------------------
-http://localhost:5218/db
+## DELETE http://localhost:5218/db ------------------------------------------------------------------
 
-
-## POST ---------------------------------------------------------------------
-http://localhost:5218/users
+## POST http://localhost:5218/users -----------------------------------------------------------------
 {
 "name": "Azar",
 "email": "Azar@email.com",
 "password": "h3mligt"
 }
 
-http://localhost:5218/login
+## POST http://localhost:5218/login -----------------------------------------------------------------
 {
 "email": "Azar@email.com",
 "password": "h3mligt"
 }
+Returnar true om matchar databasen & ger dig en cookie 
 
-if(true)
+## Headers Set-Cookie
+## GET http://localhost:5218/me ---------------------------------------------------------------------
 {
-      Set-Cookie .AspNetCore.Session=CfDJ8CXcZI..........
-      ..................................................
-      .......................
+  "name": "Azar",
+  "email": "Azar@email.com",
+  "status": "Logged in with cookie"
 }
-else
-{
-      return no Cookie
-}
+returnar [401 Unautthorized] om man försöker logga in utan Cookie i header
+
+
+
+
+
+
 ## GET -------------------------------------------------------------------------------
 
 http://localhost:5218/login
