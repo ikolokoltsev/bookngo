@@ -76,5 +76,24 @@ async Task db_reset_to_default(Config config)
                                       )
                                       """; 
     await MySqlHelper.ExecuteNonQueryAsync(config.db, "DROP TABLE IF EXISTS users");
-    await MySqlHelper.ExecuteNonQueryAsync(config.db, query_create_users_table);   
+    await MySqlHelper.ExecuteNonQueryAsync(config.db, query_create_users_table); 
+
+    string query_create_service_table = """
+                                    CREATE TABLE service
+                                    (
+                                    id INT PRIMARY KEY AUTO_INCREMENT,
+                                    name VARCHAR(255) NOT NULL,
+                                    category ENUM('staying', 'activities', 'package-trips')
+                                    )
+                                    """; 
+  await MySqlHelper.ExecuteNonQueryAsync(config.db, "DROP TABLE IF EXISTS service");
+  await MySqlHelper.ExecuteNonQueryAsync(config.db, query_create_service_table);     
 }
+
+//
+
+
+
+
+
+//
