@@ -1,6 +1,4 @@
 global using MySql.Data.MySqlClient;
-using Microsoft.Extensions.Options;
-using MySqlX.XDevAPI.Common;
 using server;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -73,14 +71,10 @@ async Task db_reset_to_default(Config config)
                                       (
                                         id INT PRIMARY KEY AUTO_INCREMENT,
                                         name VARCHAR(255) NOT NULL,
-                                        password VARCHAR(255) NOT NULL,
+                                        password VARCHAR(128),
                                         email VARCHAR(255) NOT NULL    
                                       )
                                       """; 
-    await MySqlHelper.ExecuteNonQueryAsync(config.db, query_create_users_table);
+    await MySqlHelper.ExecuteNonQueryAsync(config.db, "DROP TABLE IF EXISTS users");
+    await MySqlHelper.ExecuteNonQueryAsync(config.db, query_create_users_table);   
 }
-
-
-
-
-
