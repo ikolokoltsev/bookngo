@@ -15,18 +15,24 @@ static class Profile
                 {
                     if(reader.Read())
                     {
-                        object name_or_null = reader[1];
-                        string? name = null;
-
-                        if(name_or_null is string s)
-                        {
-                            name = s;
-                        }
-
-                        result = new(reader.GetString(0), name);
+                        result = new(reader.GetString(0), reader[1] as string);
                     }
                 }
         }
         return result; 
     }
 }
+
+
+    //                     if(reader.Read())
+    //                     {
+    //                         object name_or_null = reader[1];
+    //                         string? name = null;
+
+    //                         if(name_or_null is string s)
+    //                         {
+    //                             name = s;
+    //                         }
+
+    //                         result = new(reader.GetString(0), name);
+    //                     }

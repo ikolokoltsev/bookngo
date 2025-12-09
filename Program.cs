@@ -70,7 +70,7 @@ async Task db_reset_to_default(Config config)
                                       CREATE TABLE users
                                       (
                                         id INT PRIMARY KEY AUTO_INCREMENT,
-                                        name VARCHAR(255),
+                                        name VARCHAR(255) NOT NULL,
                                         password VARCHAR(128),
                                         email VARCHAR(255) NOT NULL    
                                       )
