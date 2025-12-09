@@ -23,7 +23,7 @@ app.MapGet("/", () => new
       endpoints = new[] {"/login", "/users", "/db"}
       
 });
-
+app.MapGet("/profile", Profile.Get);
 
 app.MapDelete("/db", db_reset_to_default);
 
@@ -70,7 +70,7 @@ async Task db_reset_to_default(Config config)
                                       CREATE TABLE users
                                       (
                                         id INT PRIMARY KEY AUTO_INCREMENT,
-                                        name VARCHAR(255) NOT NULL,
+                                        name VARCHAR(255),
                                         password VARCHAR(128),
                                         email VARCHAR(255) NOT NULL    
                                       )
