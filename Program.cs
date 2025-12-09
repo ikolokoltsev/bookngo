@@ -1,41 +1,36 @@
+global using Npgsql;
+using server;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
-
+Config config = new("server=127.0.0.1;uid=bookngo;pwd=pass;database=bookngo;");
+builder.Services.AddSingleton(config);
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
-}
+app.MapPost("/users", Users.Post);
 
-app.UseHttpsRedirection();
-
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
-
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast =  Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast");
+app.MapDelete("/db", db_reset_to_default);
 
 app.Run();
 
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
+async Task db_reset_to_default(Config config)
 {
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
+    string query_create_users_table = """
+        CREATE TABLE users
+        (
+            id SERIAL PRIMARY KEY,
+            name VARCHAR(255),
+            email VARCHAR(254) NOT NULL UNIQUE,
+            password VARCHAR(128)
+        )
+    """;
+
+    using var conn = new NpgsqlConnection(config.db);
+    await conn.OpenAsync();
+
+    using var cmdDrop = new NpgsqlCommand("DROP TABLE IF EXISTS users", conn);
+    await cmdDrop.ExecuteNonQueryAsync();
+
+    using var cmdCreate = new NpgsqlCommand(query_create_users_table, conn);
+    await cmdCreate.ExecuteNonQueryAsync();
 }
