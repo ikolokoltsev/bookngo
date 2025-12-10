@@ -1,9 +1,6 @@
 namespace server; 
 static class Service
 {
-
-
-
     public enum ServiceCategory
     {
         staying,
@@ -15,15 +12,22 @@ static class Service
         string Type,
         string City
     );
-       
-
-      public static async Task Post(Post_Args service, Config config)
+      public static async Task<IResult> Post(Post_Args service, Config config)
       {
+            if(string.IsNullOrWhiteSpace(service.Name))
+                return Results.BadRequest($"Name is required");
+            
+
+            if(string.IsNullOrWhiteSpace(service.Type))
+                return Results.BadRequest($"Type is required");
+
+            if(string.IsNullOrWhiteSpace(service.City))
+                return Results.BadRequest($"City is required");
+
             if(!Enum.TryParse<ServiceCategory>(service.Category, ignoreCase: true, out var category))
             {
-                throw new ArgumentException($"Invalid category: {service.Category} ");
+                return Results.BadRequest($"Invalid input: {service.Category}  category: staying/activities");
             }
-
             string query = "INSERT INTO service(name, category, type, city) VALUES(@name, @category, @type, @city )";
             var parameters = new MySqlParameter[]
             {
@@ -34,6 +38,8 @@ static class Service
             };
 
             await MySqlHelper.ExecuteNonQueryAsync(config.db, query, parameters);
+
+            return Results.Created("/service", service);  
       }
 }
 
