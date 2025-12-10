@@ -26,6 +26,8 @@ app.MapGet("/", () => new
 app.MapGet("/profile", Profile.Get);
 
 app.MapDelete("/db", db_reset_to_default);
+//
+app.MapPost("/service", Service.Post);
 
 app.MapPost("/users", Users.Post);
 
@@ -61,7 +63,8 @@ app.MapGet("/login", async (Config config, HttpContext ctx) =>
     var user = await Login.Get(config, ctx);
     return user != null ? Results.Ok(user) : Results.Unauthorized();
 });
-    
+
+
 app.Run();
 
 async Task db_reset_to_default(Config config)
@@ -77,23 +80,19 @@ async Task db_reset_to_default(Config config)
                                       """; 
     await MySqlHelper.ExecuteNonQueryAsync(config.db, "DROP TABLE IF EXISTS users");
     await MySqlHelper.ExecuteNonQueryAsync(config.db, query_create_users_table); 
-
+//
     string query_create_service_table = """
                                     CREATE TABLE service
                                     (
                                     id INT PRIMARY KEY AUTO_INCREMENT,
                                     name VARCHAR(255) NOT NULL,
-                                    category ENUM('staying', 'activities', 'package-trips')
+                                    category ENUM('staying', 'activities'),
+                                    type VARCHAR(255),
+                                    city VARCHAR(255)
                                     )
                                     """; 
   await MySqlHelper.ExecuteNonQueryAsync(config.db, "DROP TABLE IF EXISTS service");
-  await MySqlHelper.ExecuteNonQueryAsync(config.db, query_create_service_table);     
+  await MySqlHelper.ExecuteNonQueryAsync(config.db, query_create_service_table);
+
+//
 }
-
-//
-
-
-
-
-
-//
