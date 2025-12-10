@@ -87,7 +87,7 @@ async Task db_reset_to_default(Config config)
                                     id INT PRIMARY KEY AUTO_INCREMENT,
                                     name VARCHAR(255) NOT NULL,
                                     category ENUM('staying', 'activities'),
-                                    type VARCHAR(255),
+                                    type ENUM('hotel', 'motel', 'bedandbreakfast', 'camping', 'glamping', 'museum', 'training'),
                                     city VARCHAR(255)
                                     )
                                     """; 
