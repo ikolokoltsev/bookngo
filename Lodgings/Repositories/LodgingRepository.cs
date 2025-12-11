@@ -14,11 +14,11 @@ public class LodgingRepository : ILodgingRepository
     public async Task<IEnumerable<Lodging>> GetAllLodgings()
     {
         var lodgings = new List<Lodging>();
-        using var connection = new MySqlConnection(_config.db);
+        var connection = new MySqlConnection(_config.db);
         await connection.OpenAsync();
 
         var query = new MySqlCommand("SELECT * FROM lodgings", connection);
-        using var reader = await query.ExecuteReaderAsync();
+        var reader = await query.ExecuteReaderAsync();
         while (await reader.ReadAsync())
         {
             lodgings.Add(new Lodging
