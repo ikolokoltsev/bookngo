@@ -23,7 +23,7 @@ app.UseSession();
 app.MapGet("/", () => new
 {
   status = "running",
-  endpoints = new[] { "/login", "/users", "/db", "/lodgings" }
+  endpoints = new[] { "/login", "/users", "/db", }
 
 });
 app.MapGet("/profile", Profile.Get);
@@ -82,26 +82,28 @@ async Task db_reset_to_default(Config config)
   await MySqlHelper.ExecuteNonQueryAsync(config.db, "DROP TABLE IF EXISTS users");
   await MySqlHelper.ExecuteNonQueryAsync(config.db, query_create_users_table);
 
-  string query_create_lodgings_table = """
-                                      CREATE TABLE lodgings
-                                      (
-                                        id INT PRIMARY KEY AUTO_INCREMENT,
-                                        name VARCHAR(255) NOT NULL,
-                                        price DECIMAL(10, 2) NOT NULL,
-                                        address VARCHAR(255) NOT NULL,
-                                        rating DECIMAL(10, 2) NOT NULL
-                                      )
-                                      """;
   await MySqlHelper.ExecuteNonQueryAsync(config.db, "DROP TABLE IF EXISTS lodgings");
+
+  string query_create_lodgings_table = """
+                                        CREATE TABLE lodgings
+                                        (
+                                          id INT PRIMARY KEY AUTO_INCREMENT,
+                                          name VARCHAR(255) NOT NULL,
+                                          price DOUBLE NOT NULL,
+                                          address VARCHAR(255) NOT NULL,
+                                          rating DOUBLE NOT NULL,
+                                          status VARCHAR(50) NOT NULL
+                                        )
+                                        """;
   await MySqlHelper.ExecuteNonQueryAsync(config.db, query_create_lodgings_table);
 
   string seed_lodgings = """
-                          INSERT INTO lodgings (name, price, address, rating) VALUES
-                          ('Seaside Escape', 120.00, '123 Ocean View, Miami, FL', 4.6),
-                          ('Mountain Cabin', 95.00, '45 Pine Rd, Aspen, CO', 4.8),
-                          ('City Loft', 150.00, '789 Market St, San Francisco, CA', 4.2),
-                          ('Lake House Retreat', 180.00, '12 Lakeside Dr, Lake Tahoe, CA', 4.9),
-                          ('Downtown Studio', 85.00, '210 Center Ave, Austin, TX', 4.3)
+                          INSERT INTO lodgings (name, price, address, rating, status) VALUES
+                          ('Seaside Escape', 120.00, '123 Ocean View, Miami, FL', 4.6, 'Available'),
+                          ('Mountain Cabin', 95.00, '45 Pine Rd, Aspen, CO', 4.8, 'Booked'),
+                          ('City Loft', 150.00, '789 Market St, San Francisco, CA', 4.2, 'Unavailable'),
+                          ('Lake House Retreat', 180.00, '12 Lakeside Dr, Lake Tahoe, CA', 4.9, 'UnderMaintenance'),
+                          ('Downtown Studio', 85.00, '210 Center Ave, Austin, TX', 4.3, 'PendingApproval')
                           """;
   await MySqlHelper.ExecuteNonQueryAsync(config.db, seed_lodgings);
 }
