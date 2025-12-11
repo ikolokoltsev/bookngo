@@ -77,6 +77,7 @@ async Task db_reset_to_default(Config config)
                                         id INT PRIMARY KEY AUTO_INCREMENT,
                                         name VARCHAR(255) NOT NULL,
                                         password VARCHAR(128),
+                                        admin BOOL,
                                         email VARCHAR(255) NOT NULL    
                                       )
                                       """;
