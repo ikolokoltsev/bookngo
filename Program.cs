@@ -11,9 +11,10 @@ builder.Services.AddSession(options =>
   options.Cookie.HttpOnly = true;
   options.Cookie.IsEssential = true;
 });
+// End: Session koniguration, "in memory cache"
+
 builder.Services.AddControllers();
 builder.Services.AddScoped<ILodgingRepository, LodgingRepository>();
-// End: Session koniguration, "in memory cache"
 
 Config config = new("server=127.0.0.1;uid=bookngo;pwd=bookngo;database=bookngo;");
 builder.Services.AddSingleton(config);
