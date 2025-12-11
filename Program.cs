@@ -1,6 +1,6 @@
 global using MySql.Data.MySqlClient;
 using server;
-using server.Features.Lodgings.Repositories;
+using server.Lodgings.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,7 +23,7 @@ app.UseSession();
 app.MapGet("/", () => new
 {
   status = "running",
-  endpoints = new[] { "/login", "/users", "/db" }
+  endpoints = new[] { "/login", "/users", "/db", "/lodgings" }
 
 });
 app.MapGet("/profile", Profile.Get);
@@ -65,9 +65,7 @@ app.MapGet("/login", async (Config config, HttpContext ctx) =>
   return user != null ? Results.Ok(user) : Results.Unauthorized();
 });
 
-// app.UseHttpsRedirection();
-// app.UseAuthorization();
-// app.MapControllers();
+app.MapControllers();
 app.Run();
 
 async Task db_reset_to_default(Config config)

@@ -1,4 +1,4 @@
-namespace server.Features.Lodgings.Models
+namespace server.Lodgings.Models
 {
     public class Lodging
     {

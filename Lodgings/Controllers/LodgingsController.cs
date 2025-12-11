@@ -1,11 +1,11 @@
-using server.Features.Lodgings.Models;
-using server.Features.Lodgings.Repositories;
+using server.Lodgings.Models;
+using server.Lodgings.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
-namespace server.Features.Lodgings.Controllers;
+namespace server.Lodgings.Controllers;
 
 [ApiController]
-[Route("lodgings")]
+[Route("lodging")]
 public class LodgingsController(ILodgingRepository _lodgingRepository) : ControllerBase
 {
     [HttpGet]

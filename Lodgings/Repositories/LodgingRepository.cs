@@ -1,6 +1,6 @@
-using server.Features.Lodgings.Models;
+using server.Lodgings.Models;
 
-namespace server.Features.Lodgings.Repositories;
+namespace server.Lodgings.Repositories;
 
 public class LodgingRepository : ILodgingRepository
 {
