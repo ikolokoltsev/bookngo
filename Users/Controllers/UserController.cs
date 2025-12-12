@@ -1,13 +1,13 @@
-using server.Lodgings.Models;
-using server.Lodgings.Repositories;
+using server.Users.Models;
+using server.Users.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
 namespace server.Lodgings.Controllers;
 
 [ApiController]
-[Route("lodging")]
-public class UserController(ILodgingRepository _userRepository) : ControllerBase
+[Route("users")]
+public class UserController(IUserRepository _userRepository) : ControllerBase
 {
     [HttpGet]
-    public async Task<IEnumerable<Lodging>> GetAllLodgings() => await _userRepository.GetAllLodgings();
+    public async Task<IEnumerable<User>> dbGetAllUsers() => await _userRepository.GetAllUsers();
 }
