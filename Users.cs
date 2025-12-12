@@ -2,15 +2,16 @@ namespace server;
 
 static class Users
 {
-      public record Post_Args(string Name, string Email, string Password);
+      public record Post_Args(string Name, string Email, bool Admin, string Password);
 
       public static async Task Post(Post_Args user, Config config)
       {
-            string query = "INSERT INTO users(name, email, password) VALUES(@name, @email, @password)";
+            string query = "INSERT INTO users(name, email, admin, password) VALUES(@name, @email, @admin, @password)";
             var parameters = new MySqlParameter[]
             {
             new("@name", user.Name),
             new("@email", user.Email),
+            new("@admin", user.Admin),
             new("@password", user.Password)
             };
 

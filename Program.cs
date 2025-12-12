@@ -15,7 +15,8 @@ builder.Services.AddControllers();
 builder.Services.AddScoped<ILodgingRepository, LodgingRepository>();
 // End: Session koniguration, "in memory cache"
 
-Config config = new("server=127.0.0.1;uid=bookngo;pwd=bookngo;database=bookngo;");
+//CHANGE "port=*" to your active port before running, typically 3306
+Config config = new("server=127.0.0.1;port=3307;uid=bookngo;pwd=bookngo;database=bookngo;");
 builder.Services.AddSingleton(config);
 var app = builder.Build();
 
@@ -76,6 +77,7 @@ async Task db_reset_to_default(Config config)
                                         id INT PRIMARY KEY AUTO_INCREMENT,
                                         name VARCHAR(255) NOT NULL,
                                         password VARCHAR(128),
+                                        admin BOOL,
                                         email VARCHAR(255) NOT NULL    
                                       )
                                       """;
