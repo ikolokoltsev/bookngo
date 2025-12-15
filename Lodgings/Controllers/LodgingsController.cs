@@ -5,9 +5,16 @@ using Microsoft.AspNetCore.Mvc;
 namespace server.Lodgings.Controllers;
 
 [ApiController]
-[Route("lodging")]
+[Route("lodgings")]
 public class LodgingsController(ILodgingRepository _lodgingRepository) : ControllerBase
 {
     [HttpGet]
-    public async Task<IEnumerable<Lodging>> GetAllLodgings() => await _lodgingRepository.GetAllLodgings();
+    public async Task<IEnumerable<LodgingData>> GetLodgings() => await _lodgingRepository.GetAllLodgings();
+
+    [HttpGet]
+    [Route("{id}")]
+    public async Task<LodgingDetail?> GetLodgingById(int id) => await _lodgingRepository.GetLodgingById(id);
+
+    [HttpPost]
+    public async Task PostLodging([FromBody] Lodging lodging) => await _lodgingRepository.CreateLodging(lodging);
 }

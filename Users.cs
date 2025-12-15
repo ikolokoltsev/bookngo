@@ -17,8 +17,7 @@ static class Users
 
             await MySqlHelper.ExecuteNonQueryAsync(config.db, query, parameters);
       }
-} 
-
+}
 
 // string sql = "INSERT INTO users(name, email, password) VALUES (@name, @email, @password)";
 
