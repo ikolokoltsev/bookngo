@@ -10,4 +10,16 @@ public class LodgingsController(ILodgingRepository _lodgingRepository) : Control
 {
     [HttpGet]
     public async Task<IEnumerable<Lodging>> GetAllLodgings() => await _lodgingRepository.GetAllLodgings();
+
+    // [HttpGet("filter")]
+    // public async Task<IEnumerable<Lodging>> GetFilteredLodgings([FromQuery] LodgingFilterQuery filter)
+    // {
+    //     return await _lodgingRepository.GetFilteredLodgings(filter);
+    // }
+
+    [HttpGet("filter")]
+    public async Task<IEnumerable<Lodging>> GetFilteredLodgings([FromQuery]LodgingFilterQuery filter)
+    {
+        return await _lodgingRepository.GetFilteredLodgings(filter);
+    } 
 }

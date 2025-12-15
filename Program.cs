@@ -17,7 +17,7 @@ builder.Services.AddControllers();
 builder.Services.AddScoped<ILodgingRepository, LodgingRepository>();
 
 //CHANGE "port=*" to your active port before running, typically 3306
-Config config = new("server=127.0.0.1;port=3307;uid=bookngo;pwd=bookngo;database=bookngo;");
+Config config = new("server=127.0.0.1;uid=bookngo;pwd=bookngo;database=bookngo;");
 builder.Services.AddSingleton(config);
 var app = builder.Build();
 
