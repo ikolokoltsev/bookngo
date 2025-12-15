@@ -24,8 +24,8 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 builder.Services.AddScoped<ILodgingRepository, LodgingRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 
-//CHANGE "port=*" to your active port before running, typically 3306
-Config config = new("server=127.0.0.1;uid=bookngo;pwd=bookngo;database=bookngo;");
+var dbPort = Environment.GetEnvironmentVariable("DB_PORT");
+Config config = new($"server=127.0.0.1;port={dbPort};uid=bookngo;pwd=bookngo;database=bookngo;");
 builder.Services.AddSingleton(config);
 var app = builder.Build();
 
