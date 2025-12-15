@@ -1,30 +1,13 @@
 namespace server.Lodgings.Models;
-
 // TODO: replace enum, because parsing enums is pain
 public class LodgingFilterQuery
 {
       public double? MinPrice { get; set; }
       public double? MaxPrice { get; set; }
-      
-      public double? MinRating { get; set; }
-      
+      public double? MinRating { get; set; }  
       public LodgingStatus? Status { get; set; }
       public string? SearchTerm { get; set; }
 }
-
-
-
-
-//GET /lodging/filter?MinPrice=100
-// Status får defaultvärdet: Available (0)
-// Filtrerar ALLTID på Status = Available
-
-// GET /lodging/filter?MinPrice=100
-// Status är null
-// Filtrerar INTE på Status alls ✅
-
-
-
 
 
 
