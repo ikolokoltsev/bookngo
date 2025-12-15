@@ -1,6 +1,6 @@
 namespace server;
 
-static class Users
+static class Users_old
 {
       public record Post_Args(string Name, string Email, bool Admin, string Password);
 

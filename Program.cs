@@ -4,6 +4,7 @@ using server.Lodgings.Models;
 using server.Lodgings.Repositories;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using server.Users.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,6 +22,7 @@ builder.Services.AddControllers().AddJsonOptions(options =>
   options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase));
 });
 builder.Services.AddScoped<ILodgingRepository, LodgingRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 //CHANGE "port=*" to your active port before running, typically 3306
 Config config = new("server=127.0.0.1;uid=bookngo;pwd=bookngo;database=bookngo;");
@@ -41,7 +43,7 @@ app.MapDelete("/db", db_reset_to_default);
 app.MapPost("/service_insert", ServiceInsertInto.Post);
 app.MapGet("/service", ServiceBrowseAll.Get);
 
-app.MapPost("/users", Users.Post);
+app.MapPost("/users", Users_old.Post);
 
 
 
