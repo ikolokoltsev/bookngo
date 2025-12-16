@@ -124,4 +124,10 @@ async Task db_reset_to_default(Config config)
                           ('Downtown Studio', 85.00, '210 Center Ave, Austin, TX', 4.3, 'PendingApproval', 1, 0, 0, 0)
                           """;
   await MySqlHelper.ExecuteNonQueryAsync(config.db, seed_lodgings);
+
+  string seed_users = """
+                          INSERT INTO users (name, email, admin, password) VALUES
+                          ('Oscar', 'email', true, 's3cret')
+                          """;
+  await MySqlHelper.ExecuteNonQueryAsync(config.db, seed_users);
 }
