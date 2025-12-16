@@ -44,7 +44,6 @@ public class LodgingRepository : ILodgingRepository
                              """;
         var parameters = new MySqlParameter[] { new("@id", id) };
         using var reader = await MySqlHelper.ExecuteReaderAsync(_config.db, query, parameters);
-        Console.WriteLine(reader);
         if (await reader.ReadAsync())
         {
             return new LodgingDetail
