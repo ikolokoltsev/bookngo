@@ -9,7 +9,7 @@ namespace server.Lodgings.Controllers;
 public class LodgingsController(ILodgingRepository _lodgingRepository) : ControllerBase
 {
     [HttpGet]
-    public async Task<IEnumerable<LodgingData>> GetLodgings() => await _lodgingRepository.GetAllLodgings();
+     public async Task<IEnumerable<LodgingData>> GetLodgings([FromQuery] LodgingFilterQuery filter) => await _lodgingRepository.GetAllLodgings(filter);
 
     [HttpGet]
     [Route("{id}")]

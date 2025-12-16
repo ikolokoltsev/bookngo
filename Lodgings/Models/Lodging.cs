@@ -52,3 +52,12 @@ public record LodgingDetail
     public string? Description { get; init; }
     public required double Price { get; init; }
 }
+
+public class LodgingFilterQuery
+{
+      public double? MinPrice { get; set; }
+      public double? MaxPrice { get; set; }
+      public double? MinRating { get; set; }  
+      public LodgingStatus? Status { get; set; }
+      public string? SearchTerm { get; set; }
+}
