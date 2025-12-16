@@ -13,9 +13,9 @@ public class LodgingRepository : ILodgingRepository
 
     public async Task<IEnumerable<LodgingData>> GetAllLodgings(LodgingFilterQuery filter)
     {
-        var lodgings = new List<LodgingData>();
-        var queryParts = new List<string> { "SELECT Id, Name, Price, Address, Rating, Status FROM lodgings WHERE 1=1" };
-        var parameters = new List<MySqlParameter>();
+        List<LodgingData> lodgings = new List<LodgingData>();
+        List<string> queryParts = new List<string> { "SELECT Id, Name, Price, Address, Rating, Status FROM lodgings WHERE 1=1" };
+        List<MySqlParameter> parameters = new List<MySqlParameter>();
         if (filter.MinPrice.HasValue)
         {
             queryParts.Add("AND Price >= @MinPrice");
