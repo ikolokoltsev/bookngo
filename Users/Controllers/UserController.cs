@@ -15,7 +15,7 @@ public class UserController(IUserRepository _userRepository) : ControllerBase
 
 
     [HttpPost]
-    public async Task dbCreateUser(Post_Args user) => await _userRepository.CreateUser(user);
+    public async Task dbCreateUser(Post_Args user) => await _userRepository.CreateUser(user, HttpContext);
 
     [HttpGet]
     [Route("isadmin")]

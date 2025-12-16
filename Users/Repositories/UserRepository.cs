@@ -36,9 +36,12 @@ public class UserRepository : IUserRepository
         return users;
     }
 
-    public async Task CreateUser(UserController.Post_Args user)
+    public async Task CreateUser(UserController.Post_Args user, HttpContext ctx)
     {
-        Console.WriteLine(user);
+        bool IsAdmin = false;
+        IsAdmin = await GetAdminStatus(ctx);
+        if(IsAdmin)
+        {
         string query = "INSERT INTO users(name, email, admin, password) VALUES(@name, @email, @admin, @password)";
         var parameters = new MySqlParameter[]
         {
@@ -48,6 +51,7 @@ public class UserRepository : IUserRepository
             new("@password", user.Password)
         };
         await MySqlHelper.ExecuteNonQueryAsync(_config.db, query, parameters);
+        }
     }
 
     public async Task<bool> GetAdminStatus(HttpContext ctx)
@@ -79,21 +83,4 @@ public class UserRepository : IUserRepository
         }
         return false;
     }
-
-    // app.MapGet("/me", async (Config config, HttpContext ctx) =>
-        // {
-        // var user = await Login.Get(config, ctx);
-
-        // if (user == null)
-        // {
-        //     return Results.Unauthorized(); // 401: Not autorized
-        // }
-        // return Results.Ok(new
-        // {
-        //     Name = user.Name,
-        //     Email = user.Email,
-        //     Status = "Logged in with cookie!"
-        // });
-        // }
-    // );
 }
