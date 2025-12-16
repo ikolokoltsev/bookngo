@@ -8,4 +8,5 @@ public interface IUserRepository
 {
     Task<IEnumerable<User>> GetAllUsers();
     Task CreateUser(UserController.Post_Args user);
+    Task<bool> GetAdminStatus(HttpContext ctx);
 }

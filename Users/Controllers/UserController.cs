@@ -16,4 +16,8 @@ public class UserController(IUserRepository _userRepository) : ControllerBase
 
     [HttpPost]
     public async Task dbCreateUser(Post_Args user) => await _userRepository.CreateUser(user);
+
+    [HttpGet]
+    [Route("isadmin")]
+    public async Task<bool> dbGetAdminStatus() => await _userRepository.GetAdminStatus(HttpContext);
 }

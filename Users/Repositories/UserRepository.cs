@@ -25,6 +25,7 @@ public class UserRepository : IUserRepository
         {
             users.Add(new User
             {
+                Id = reader.GetInt32(0),
                 Name = reader.GetString(1),
                 Password = reader.GetString(2),
                 Admin = reader.GetBoolean(3),
@@ -48,4 +49,51 @@ public class UserRepository : IUserRepository
         };
         await MySqlHelper.ExecuteNonQueryAsync(_config.db, query, parameters);
     }
+
+    public async Task<bool> GetAdminStatus(HttpContext ctx)
+    {
+        Debug.Assert(ctx != null);
+        var user = await Login.Get(_config, ctx);
+
+        if(ctx.Session.IsAvailable)
+        {
+            if(ctx.Session.Keys.Contains("user_id"))
+            {
+                string query = "SELECT Admin FROM users WHERE id = @id";
+                var parameters = new MySqlParameter[]
+                {
+                    new("@id", ctx.Session.GetInt32("user_id"))
+                };
+
+                using(var reader = await MySqlHelper.ExecuteReaderAsync(_config.db, query, parameters))
+                {
+                    if(reader.Read())
+                    {
+                        if(reader[0] is bool admin)
+                        {
+                            return admin;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    // app.MapGet("/me", async (Config config, HttpContext ctx) =>
+        // {
+        // var user = await Login.Get(config, ctx);
+
+        // if (user == null)
+        // {
+        //     return Results.Unauthorized(); // 401: Not autorized
+        // }
+        // return Results.Ok(new
+        // {
+        //     Name = user.Name,
+        //     Email = user.Email,
+        //     Status = "Logged in with cookie!"
+        // });
+        // }
+    // );
 }
