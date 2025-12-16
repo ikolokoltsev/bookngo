@@ -40,10 +40,6 @@ app.MapGet("/profile", Profile.Get);
 
 app.MapDelete("/db", db_reset_to_default);
 
-
-
-
-
 app.MapGet("/me", async (Config config, HttpContext ctx) =>
 {
   var user = await Login.Get(config, ctx);
