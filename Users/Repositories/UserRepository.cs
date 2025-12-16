@@ -1,4 +1,7 @@
+using Microsoft.AspNetCore.Mvc;
 using server.Users.Models;
+using System.Diagnostics;
+using server.Lodgings.Controllers;
 
 namespace server.Users.Repositories;
 
@@ -22,7 +25,6 @@ public class UserRepository : IUserRepository
         {
             users.Add(new User
             {
-                Id = reader.GetInt32(0),
                 Name = reader.GetString(1),
                 Password = reader.GetString(2),
                 Admin = reader.GetBoolean(3),
@@ -31,5 +33,19 @@ public class UserRepository : IUserRepository
         }
 
         return users;
+    }
+
+    public async Task CreateUser(UserController.Post_Args user)
+    {
+        Console.WriteLine(user);
+        string query = "INSERT INTO users(name, email, admin, password) VALUES(@name, @email, @admin, @password)";
+        var parameters = new MySqlParameter[]
+        {
+            new("@name", user.Name),
+            new("@email", user.Email),
+            new("@admin", user.Admin),
+            new("@password", user.Password)
+        };
+        await MySqlHelper.ExecuteNonQueryAsync(_config.db, query, parameters);
     }
 }
