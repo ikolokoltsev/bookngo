@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Mvc;
 using server.Users.Models;
 using System.Diagnostics;
 using server.Lodgings.Controllers;
@@ -42,15 +41,15 @@ public class UserRepository : IUserRepository
         IsAdmin = await GetAdminStatus(ctx);
         if(IsAdmin)
         {
-        string query = "INSERT INTO users(name, email, admin, password) VALUES(@name, @email, @admin, @password)";
-        var parameters = new MySqlParameter[]
-        {
-            new("@name", user.Name),
-            new("@email", user.Email),
-            new("@admin", user.Admin),
-            new("@password", user.Password)
-        };
-        await MySqlHelper.ExecuteNonQueryAsync(_config.db, query, parameters);
+            string query = "INSERT INTO users(name, email, admin, password) VALUES(@name, @email, @admin, @password)";
+            var parameters = new MySqlParameter[]
+            {
+                new("@name", user.Name),
+                new("@email", user.Email),
+                new("@admin", user.Admin),
+                new("@password", user.Password)
+            };
+            await MySqlHelper.ExecuteNonQueryAsync(_config.db, query, parameters);
         }
     }
 
