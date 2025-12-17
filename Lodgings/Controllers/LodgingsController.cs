@@ -16,5 +16,5 @@ public class LodgingsController(ILodgingRepository _lodgingRepository) : Control
     public async Task<LodgingDetail?> GetLodgingById(int id) => await _lodgingRepository.GetLodgingById(id);
 
     [HttpPost]
-    public async Task PostLodging([FromBody] Lodging lodging) => await _lodgingRepository.CreateLodging(lodging);
+    public async Task PostLodging([FromBody] Lodging lodging) => await _lodgingRepository.CreateLodging(lodging, HttpContext);
 }

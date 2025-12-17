@@ -1,4 +1,5 @@
 using server.Lodgings.Models;
+using server.Users.Repositories;
 
 namespace server.Lodgings.Repositories;
 
@@ -98,27 +99,33 @@ public class LodgingRepository : ILodgingRepository
         return null;
     }
 
-    public async Task CreateLodging(Lodging lodging)
+    public async Task CreateLodging(Lodging lodging, HttpContext ctx)
     {
-        const string query = """
-                             INSERT INTO lodgings
-                             (Name, Price, Address, Rating, Status, has_wifi, has_parking, has_pool, has_gym, description)
-                             VALUES(@name, @price, @address, @rating, @status, @hasWifi, @hasParking, @hasPool, @hasGym, @description)
-                             """;
-        var additionalInfo = lodging.AdditionalInfo ?? new AdditionalInfo();
-        var parameters = new MySqlParameter[]
+        bool IsAdmin = false;
+        UserRepository userrepo = new UserRepository(_config);
+        IsAdmin = await userrepo.GetAdminStatus(ctx);
+        if(IsAdmin)
         {
-            new("@name", lodging.Name),
-            new("@price", lodging.Price),
-            new("@address", lodging.Address),
-            new("@rating", lodging.Rating),
-            new("@status", lodging.Status.ToString()),
-            new("@hasWifi", additionalInfo.HasWifi),
-            new("@hasParking", additionalInfo.HasParking),
-            new("@hasPool", additionalInfo.HasPool),
-            new("@hasGym", additionalInfo.HasGym),
-            new("@description", lodging.Description ?? (object)DBNull.Value)
-        };
-        await MySqlHelper.ExecuteNonQueryAsync(_config.db, query, parameters);
+            const string query = """
+                                INSERT INTO lodgings
+                                (Name, Price, Address, Rating, Status, has_wifi, has_parking, has_pool, has_gym, description)
+                                VALUES(@name, @price, @address, @rating, @status, @hasWifi, @hasParking, @hasPool, @hasGym, @description)
+                                """;
+            var additionalInfo = lodging.AdditionalInfo ?? new AdditionalInfo();
+            var parameters = new MySqlParameter[]
+            {
+                new("@name", lodging.Name),
+                new("@price", lodging.Price),
+                new("@address", lodging.Address),
+                new("@rating", lodging.Rating),
+                new("@status", lodging.Status.ToString()),
+                new("@hasWifi", additionalInfo.HasWifi),
+                new("@hasParking", additionalInfo.HasParking),
+                new("@hasPool", additionalInfo.HasPool),
+                new("@hasGym", additionalInfo.HasGym),
+                new("@description", lodging.Description ?? (object)DBNull.Value)
+            };
+            await MySqlHelper.ExecuteNonQueryAsync(_config.db, query, parameters);
+        }
     }
 }
