@@ -4,7 +4,7 @@ namespace server.Lodgings.Repositories;
 
 public interface ILodgingRepository
 {
-    Task<IEnumerable<LodgingData>> GetAllLodgings();
+    Task<IEnumerable<LodgingData>> GetAllLodgings(LodgingFilterQuery filter);
     Task<LodgingDetail?> GetLodgingById(int id);
     Task CreateLodging(Lodging lodging);
 }
