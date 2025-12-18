@@ -40,7 +40,13 @@ public class BookingRepository : IBookingRepository
         {
             if(ctx.Session.Keys.Contains("user_id"))
             {
-                const string query = "SELECT LodgingID FROM bookings WHERE LodgingID = @id";
+                // const string query = "SELECT LodgingID FROM bookings WHERE LodgingID = @id";
+                const string query = """
+                                    SELECT l.name, l.address
+                                    FROM bookings as b
+                                    LEFT JOIN lodgings AS l ON b.LodgingID = l.id
+                                    WHERE b.LodgingID = @id
+                                    """;
 
                 var parameters = new MySqlParameter[]
                 {
@@ -54,7 +60,8 @@ public class BookingRepository : IBookingRepository
                 {
                     bookingInfos.Add(new BookingInfo
                     {
-                        LodgingID = reader.GetInt32(0)
+                        LodgingName = reader.GetString(0),
+                        LodgingAddress = reader.GetString(1)
                     });
                 }
             }
