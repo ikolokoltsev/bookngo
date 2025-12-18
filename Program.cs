@@ -76,6 +76,11 @@ app.Run();
 
 async Task db_reset_to_default(Config config)
 {
+
+  await MySqlHelper.ExecuteNonQueryAsync(config.db, "DROP TABLE IF EXISTS bookings");
+  await MySqlHelper.ExecuteNonQueryAsync(config.db, "DROP TABLE IF EXISTS users");
+  await MySqlHelper.ExecuteNonQueryAsync(config.db, "DROP TABLE IF EXISTS lodgings");
+
   string query_create_users_table = """
                                       CREATE TABLE users
                                       (
@@ -86,10 +91,7 @@ async Task db_reset_to_default(Config config)
                                         email VARCHAR(255) NOT NULL    
                                       )
                                       """;
-  await MySqlHelper.ExecuteNonQueryAsync(config.db, "DROP TABLE IF EXISTS users");
   await MySqlHelper.ExecuteNonQueryAsync(config.db, query_create_users_table);
-
-  await MySqlHelper.ExecuteNonQueryAsync(config.db, "DROP TABLE IF EXISTS lodgings");
 
   string query_create_lodgings_table = """
                                         CREATE TABLE lodgings
@@ -109,6 +111,18 @@ async Task db_reset_to_default(Config config)
                                         """;
   await MySqlHelper.ExecuteNonQueryAsync(config.db, query_create_lodgings_table);
 
+  string query_create_bookings_table = """
+                                      CREATE TABLE bookings
+                                      (
+                                        UserID INT NOT NULL,
+                                        LodgingID INT NOT NULL,
+                                        PRIMARY KEY (UserID, LodgingID),
+                                        FOREIGN KEY (UserID) REFERENCES users(id),
+                                        FOREIGN KEY (LodgingID) REFERENCES lodgings(id) 
+                                      )
+                                      """;
+  await MySqlHelper.ExecuteNonQueryAsync(config.db, query_create_bookings_table);
+
   string seed_lodgings = """
                           INSERT INTO lodgings (name, price, address, rating, status, has_wifi, has_parking, has_pool, has_gym) VALUES
                           ('Seaside Escape', 120.00, '123 Ocean View, Miami, FL', 4.6, 'Available', 1, 1, 1, 0),
@@ -124,4 +138,10 @@ async Task db_reset_to_default(Config config)
                           ('Oscar', 'email', true, 's3cret')
                           """;
   await MySqlHelper.ExecuteNonQueryAsync(config.db, seed_users);
+
+  string seed_bookings = """
+                          INSERT INTO bookings (UserID, LodgingID) VALUES
+                          (1, 1)
+                          """;
+  await MySqlHelper.ExecuteNonQueryAsync(config.db, seed_bookings);
 }
