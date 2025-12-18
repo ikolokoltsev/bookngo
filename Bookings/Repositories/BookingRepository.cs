@@ -70,8 +70,20 @@ public class BookingRepository : IBookingRepository
         return bookingInfos;
     }
 
-    // public async Task CreateBookings(BookingController.Post_Args booking, HttpContext ctx)
-    // {
-        
-    // }
+    public async Task CreateBooking(BookingController.Post_Args lodging, HttpContext ctx)
+    {
+        if(ctx.Session.IsAvailable)
+        {
+            if(ctx.Session.Keys.Contains("user_id"))
+            {
+                string query = "INSERT INTO bookings(UserID, LodgingID) VALUES(@UserID, @LodgingID)";
+                var parameters = new MySqlParameter[]
+                {
+                    new("@UserID", ctx.Session.GetInt32("user_id")),
+                    new("@LodgingID", lodging.LodgingID),
+                };
+                await MySqlHelper.ExecuteNonQueryAsync(_config.db, query, parameters);
+            }
+        }
+    }
 }
