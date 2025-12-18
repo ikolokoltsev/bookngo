@@ -9,6 +9,7 @@ using server.Bookings.Repositories;
 using server.Transports.Repositories;
 using server.Travels.Repositories;
 using server.Activities.Repositories;
+using server.ActivityBookings.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,6 +32,7 @@ builder.Services.AddScoped<IBookingRepository, BookingRepository>();
 builder.Services.AddScoped<ITransportRepository, TransportRepository>();
 builder.Services.AddScoped<ITravelRepository, TravelRepository>();
 builder.Services.AddScoped<IActivityRepository, ActivityRepository>();
+builder.Services.AddScoped<IActivityBookingRepository, ActivityBookingRepository>();
 
 var dbPort = Environment.GetEnvironmentVariable("DB_PORT");
 Config config = new($"server=127.0.0.1;port={dbPort};uid=bookngo;pwd=bookngo;database=bookngo;");
@@ -68,7 +70,7 @@ app.MapGet("/me", async (Config config, HttpContext ctx) =>
 app.MapPost("/logout", Login.Logout);
 
 // app.MapPost("/login", Login.Post);
-app.MapPost("/login", async (Login.Post_Args creds, Config config, HttpContext ctx) =>
+app.MapPost("/login", async (Login.LoginRequest creds, Config config, HttpContext ctx) =>
 {
   bool success = await Login.Post(creds, config, ctx);
   return success ? Results.Ok("Logged in!") : Results.Unauthorized();
@@ -89,6 +91,7 @@ async Task db_reset_to_default(Config config)
 
   await MySqlHelper.ExecuteNonQueryAsync(config.db, "DROP TABLE IF EXISTS travels");
   await MySqlHelper.ExecuteNonQueryAsync(config.db, "DROP TABLE IF EXISTS bookings");
+  await MySqlHelper.ExecuteNonQueryAsync(config.db, "DROP TABLE IF EXISTS activity_bookings");
   await MySqlHelper.ExecuteNonQueryAsync(config.db, "DROP TABLE IF EXISTS activities");
   await MySqlHelper.ExecuteNonQueryAsync(config.db, "DROP TABLE IF EXISTS transports");
   await MySqlHelper.ExecuteNonQueryAsync(config.db, "DROP TABLE IF EXISTS users");
@@ -167,6 +170,19 @@ async Task db_reset_to_default(Config config)
                                           """;
   await MySqlHelper.ExecuteNonQueryAsync(config.db, query_create_activities_table);
 
+  string query_create_activity_bookings_table = """
+                                                 CREATE TABLE activity_bookings
+                                                 (
+                                                   id INT PRIMARY KEY AUTO_INCREMENT,
+                                                   UserID INT NOT NULL,
+                                                   ActivityID INT NOT NULL,
+                                                   UNIQUE KEY uq_activity_bookings_user_activity (UserID, ActivityID),
+                                                   FOREIGN KEY (UserID) REFERENCES users(id),
+                                                   FOREIGN KEY (ActivityID) REFERENCES activities(id)
+                                                 )
+                                                 """;
+  await MySqlHelper.ExecuteNonQueryAsync(config.db, query_create_activity_bookings_table);
+
   string query_create_bookings_table = """
                                       CREATE TABLE bookings
                                       (
@@ -237,4 +253,10 @@ async Task db_reset_to_default(Config config)
                                     (1, 1)
                                     """;
   await MySqlHelper.ExecuteNonQueryAsync(config.db, seed_travels);
+
+  string seed_activity_bookings = """
+                                  INSERT INTO activity_bookings (UserID, ActivityID) VALUES
+                                  (1, 1)
+                                  """;
+  await MySqlHelper.ExecuteNonQueryAsync(config.db, seed_activity_bookings);
 }
