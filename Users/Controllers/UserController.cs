@@ -1,7 +1,6 @@
 using server.Users.Models;
 using server.Users.Repositories;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace server.Lodgings.Controllers;
 
@@ -11,13 +10,46 @@ public class UserController(IUserRepository _userRepository) : ControllerBase
 {
     public record Post_Args(string Email, string Name, bool Admin, string Password);
     [HttpGet]
-    public async Task<IEnumerable<User>> dbGetAllUsers() => await _userRepository.GetAllUsers();
+    public async Task<ActionResult<IEnumerable<User>>> dbGetAllUsers()
+    {
+        try
+        {
+            var users = await _userRepository.GetAllUsers();
+            return Ok(users);
+        }
+        catch (Exception)
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError, "Can't get users");
+        }
+    }
 
 
     [HttpPost]
-    public async Task dbCreateUser(Post_Args user) => await _userRepository.CreateUser(user, HttpContext);
+    public async Task<IActionResult> dbCreateUser(Post_Args user)
+    {
+        try
+        {
+            await _userRepository.CreateUser(user, HttpContext);
+            return Ok();
+        }
+        catch (Exception)
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError, "Can't get user");
+        }
+    }
 
     [HttpGet]
     [Route("isadmin")]
-    public async Task<bool> dbGetAdminStatus() => await _userRepository.GetAdminStatus(HttpContext);
+    public async Task<ActionResult<bool>> dbGetAdminStatus()
+    {
+        try
+        {
+            var isAdmin = await _userRepository.GetAdminStatus(HttpContext);
+            return Ok(isAdmin);
+        }
+        catch (Exception)
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError, "Can't get admin status");
+        }
+    }
 }
