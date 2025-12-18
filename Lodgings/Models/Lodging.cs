@@ -22,6 +22,8 @@ public class Lodging
 {
     public int Id { get; set; }
     public required string Name { get; set; }
+    public required string Country { get; set; }
+    public required string City { get; set; }
     public required string Address { get; set; }
     public required double Rating { get; set; }
     public required LodgingStatus Status { get; set; }
@@ -35,6 +37,8 @@ public record LodgingData
 {
     public int Id { get; init; }
     public required string Name { get; init; }
+    public required string Country { get; init; }
+    public required string City { get; init; }
     public required string Address { get; init; }
     public required double Rating { get; init; }
     public required LodgingStatus Status { get; init; }
@@ -45,6 +49,8 @@ public record LodgingDetail
 {
     public int Id { get; init; }
     public required string Name { get; init; }
+    public required string Country { get; init; }
+    public required string City { get; init; }
     public required string Address { get; init; }
     public required double Rating { get; init; }
     public required LodgingStatus Status { get; init; }

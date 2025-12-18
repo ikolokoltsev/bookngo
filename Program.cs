@@ -96,9 +96,11 @@ async Task db_reset_to_default(Config config)
                                         (
                                           id INT PRIMARY KEY AUTO_INCREMENT,
                                           name VARCHAR(255) NOT NULL,
+                                          country VARCHAR(100) NOT NULL,
+                                          city VARCHAR(255) NOT NULL,
                                           price DOUBLE NOT NULL,
-                                          address VARCHAR(255) NOT NULL,
                                           rating DOUBLE NOT NULL,
+                                          address VARCHAR(255) NOT NULL,
                                           status VARCHAR(50) NOT NULL,
                                           has_wifi BOOL NOT NULL DEFAULT 0,
                                           has_parking BOOL NOT NULL DEFAULT 0,
@@ -110,12 +112,12 @@ async Task db_reset_to_default(Config config)
   await MySqlHelper.ExecuteNonQueryAsync(config.db, query_create_lodgings_table);
 
   string seed_lodgings = """
-                          INSERT INTO lodgings (name, price, address, rating, status, has_wifi, has_parking, has_pool, has_gym) VALUES
-                          ('Seaside Escape', 120.00, '123 Ocean View, Miami, FL', 4.6, 'Available', 1, 1, 1, 0),
-                          ('Mountain Cabin', 95.00, '45 Pine Rd, Aspen, CO', 4.8, 'Booked', 0, 1, 0, 1),
-                          ('City Loft', 150.00, '789 Market St, San Francisco, CA', 4.2, 'Unavailable', 1, 0, 0, 1),
-                          ('Lake House Retreat', 180.00, '12 Lakeside Dr, Lake Tahoe, CA', 4.9, 'UnderMaintenance', 1, 1, 1, 1),
-                          ('Downtown Studio', 85.00, '210 Center Ave, Austin, TX', 4.3, 'PendingApproval', 1, 0, 0, 0)
+                          INSERT INTO lodgings (name, price, country, city, address, rating, status, has_wifi, has_parking, has_pool, has_gym) VALUES
+                          ('Seaside Escape', 120.00, 'USA', 'Miami', '123 Ocean View', 4.6, 'Available', 1, 1, 1, 0),
+                          ('Mountain Cabin', 95.00, 'USA', 'Aspen', '45 Pine Rd', 4.8, 'Booked', 0, 1, 0, 1),
+                          ('City Loft', 150.00, 'USA', 'San Francisco', '789 Market St', 4.2, 'Unavailable', 1, 0, 0, 1),
+                          ('Lake House Retreat', 180.00, 'USA', 'Lake Tahoe', '12 Lakeside Dr', 4.9, 'UnderMaintenance', 1, 1, 1, 1),
+                          ('Downtown Studio', 85.00, 'USA', 'Austin', '210 Center Ave', 4.3, 'PendingApproval', 1, 0, 0, 0)
                           """;
   await MySqlHelper.ExecuteNonQueryAsync(config.db, seed_lodgings);
 
