@@ -9,7 +9,7 @@ namespace server.Travels.Controllers;
 [Route("travels")]
 public class TravelsController(ITravelRepository _travelRepository) : ControllerBase
 {
-    public record Post_Args(int TransportID);
+    public record TravelRequest(int TransportID);
 
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Travel>>> GetAllTravels()
@@ -31,7 +31,7 @@ public class TravelsController(ITravelRepository _travelRepository) : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateTravel([FromBody] Post_Args booking)
+    public async Task<IActionResult> CreateTravel([FromBody] TravelRequest travel)
     {
         if (!HttpContext.HasValidSession())
         {
@@ -46,7 +46,7 @@ public class TravelsController(ITravelRepository _travelRepository) : Controller
 
         try
         {
-            await _travelRepository.CreateTravel(userId.Value, booking.TransportID);
+            await _travelRepository.CreateTravel(userId.Value, travel.TransportID);
             return Ok();
         }
         catch (Exception)

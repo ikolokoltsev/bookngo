@@ -35,7 +35,7 @@ public class UserRepository : IUserRepository
         return users;
     }
 
-    public async Task CreateUser(UserController.Post_Args user, HttpContext ctx)
+    public async Task CreateUser(UserController.UserRequest user, HttpContext ctx)
     {
         bool IsAdmin = false;
         IsAdmin = await GetAdminStatus(ctx);

@@ -7,5 +7,5 @@ public interface IBookingRepository
 {
     Task<IEnumerable<Booking>> GetAllBookings();
     Task<IEnumerable<BookingInfo>> GetUserBookings(HttpContext ctx);
-    Task CreateBooking(BookingController.Post_Args booking, HttpContext ctx);
+    Task CreateBooking(BookingController.BookingRequest booking, HttpContext ctx);
 }

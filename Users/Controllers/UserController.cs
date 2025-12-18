@@ -8,7 +8,7 @@ namespace server.Lodgings.Controllers;
 [Route("users")]
 public class UserController(IUserRepository _userRepository) : ControllerBase
 {
-    public record Post_Args(string Email, string Name, bool Admin, string Password);
+    public record UserRequest(string Email, string Name, bool Admin, string Password);
     [HttpGet]
     public async Task<ActionResult<IEnumerable<User>>> dbGetAllUsers()
     {
@@ -25,7 +25,7 @@ public class UserController(IUserRepository _userRepository) : ControllerBase
 
 
     [HttpPost]
-    public async Task<IActionResult> dbCreateUser(Post_Args user)
+    public async Task<IActionResult> dbCreateUser(UserRequest user)
     {
         try
         {
