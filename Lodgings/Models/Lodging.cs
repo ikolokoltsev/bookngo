@@ -59,11 +59,49 @@ public record LodgingDetail
     public required double Price { get; init; }
 }
 
+public record LodgingAdditionalInfoPatch
+{
+    public bool? HasWifi { get; init; }
+    public bool? HasParking { get; init; }
+    public bool? HasPool { get; init; }
+    public bool? HasGym { get; init; }
+
+    public bool HasUpdates() =>
+        HasWifi.HasValue || HasParking.HasValue || HasPool.HasValue || HasGym.HasValue;
+}
+
+public class LodgingUpdateRequest
+{
+    public string? Name { get; set; }
+    public string? Country { get; set; }
+    public string? City { get; set; }
+    public string? Address { get; set; }
+    public double? Rating { get; set; }
+    public LodgingStatus? Status { get; set; }
+    public string? Description { get; set; }
+    public double? Price { get; set; }
+    public LodgingAdditionalInfoPatch? AdditionalInfo { get; set; }
+
+    public bool HasUpdates() =>
+        Name != null ||
+        Country != null ||
+        City != null ||
+        Address != null ||
+        Rating.HasValue ||
+        Status.HasValue ||
+        Description != null ||
+        Price.HasValue ||
+        (AdditionalInfo != null && AdditionalInfo.HasUpdates());
+}
+
 public class LodgingFilterQuery
 {
       public double? MinPrice { get; set; }
       public double? MaxPrice { get; set; }
       public double? MinRating { get; set; }  
       public LodgingStatus? Status { get; set; }
+      public string? Country { get; set; }
+      public string? City { get; set; }
+      public string? Address { get; set; }
       public string? SearchTerm { get; set; }
 }

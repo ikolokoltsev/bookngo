@@ -24,6 +24,16 @@ public record TransportAdditionalInfo
     public bool HasPremiumClass { get; init; }
 }
 
+public record TransportAdditionalInfoPatch
+{
+    public bool? HasWifi { get; init; }
+    public bool? HasFood { get; init; }
+    public bool? HasPremiumClass { get; init; }
+
+    public bool HasUpdates() =>
+        HasWifi.HasValue || HasFood.HasValue || HasPremiumClass.HasValue;
+}
+
 public class Transport
 {
     public int Id { get; set; }
@@ -65,6 +75,32 @@ public record TransportDetail
     public required TransportStatus Status { get; init; }
     public TransportAdditionalInfo Amenities { get; init; } = new();
     public string? Description { get; init; }
+}
+
+public class TransportUpdateRequest
+{
+    public string? Name { get; set; }
+    public string? Origin { get; set; }
+    public string? Destination { get; set; }
+    public DateTime? DepartureTime { get; set; }
+    public DateTime? ArrivalTime { get; set; }
+    public double? Price { get; set; }
+    public TransportType? Type { get; set; }
+    public TransportStatus? Status { get; set; }
+    public TransportAdditionalInfoPatch? Amenities { get; set; }
+    public string? Description { get; set; }
+
+    public bool HasUpdates() =>
+        Name != null ||
+        Origin != null ||
+        Destination != null ||
+        DepartureTime.HasValue ||
+        ArrivalTime.HasValue ||
+        Price.HasValue ||
+        Type.HasValue ||
+        Status.HasValue ||
+        Description != null ||
+        (Amenities != null && Amenities.HasUpdates());
 }
 
 public class TransportFilterQuery

@@ -41,6 +41,24 @@ public class LodgingRepository : ILodgingRepository
             parameters.Add(new MySqlParameter("@Status", filter.Status.Value.ToString()));
         }
 
+        if (!string.IsNullOrWhiteSpace(filter.Country))
+        {
+            queryParts.Add("AND Country = @Country");
+            parameters.Add(new MySqlParameter("@Country", filter.Country));
+        }
+
+        if (!string.IsNullOrWhiteSpace(filter.City))
+        {
+            queryParts.Add("AND City = @City");
+            parameters.Add(new MySqlParameter("@City", filter.City));
+        }
+
+        if (!string.IsNullOrWhiteSpace(filter.Address))
+        {
+            queryParts.Add("AND Address = @Address");
+            parameters.Add(new MySqlParameter("@Address", filter.Address));
+        }
+
         if (!string.IsNullOrWhiteSpace(filter.SearchTerm))
         {
             queryParts.Add("AND (Name LIKE @SearchTerm OR Country LIKE @SearchTerm OR City LIKE @SearchTerm OR Address LIKE @SearchTerm)");
@@ -128,6 +146,94 @@ public class LodgingRepository : ILodgingRepository
         };
         await MySqlHelper.ExecuteNonQueryAsync(_config.db, query, parameters);
 
+    }
+
+    public async Task<bool> UpdateLodging(int id, LodgingUpdateRequest update)
+    {
+        List<string> setParts = new();
+        List<MySqlParameter> parameters = new();
+
+        if (update.Name != null)
+        {
+            setParts.Add("Name = @name");
+            parameters.Add(new MySqlParameter("@name", update.Name));
+        }
+
+        if (update.Country != null)
+        {
+            setParts.Add("Country = @country");
+            parameters.Add(new MySqlParameter("@country", update.Country));
+        }
+
+        if (update.City != null)
+        {
+            setParts.Add("City = @city");
+            parameters.Add(new MySqlParameter("@city", update.City));
+        }
+
+        if (update.Address != null)
+        {
+            setParts.Add("Address = @address");
+            parameters.Add(new MySqlParameter("@address", update.Address));
+        }
+
+        if (update.Rating.HasValue)
+        {
+            setParts.Add("Rating = @rating");
+            parameters.Add(new MySqlParameter("@rating", update.Rating.Value));
+        }
+
+        if (update.Status.HasValue)
+        {
+            setParts.Add("Status = @status");
+            parameters.Add(new MySqlParameter("@status", update.Status.Value.ToString()));
+        }
+
+        if (update.Description != null)
+        {
+            setParts.Add("description = @description");
+            parameters.Add(new MySqlParameter("@description", update.Description));
+        }
+
+        if (update.Price.HasValue)
+        {
+            setParts.Add("Price = @price");
+            parameters.Add(new MySqlParameter("@price", update.Price.Value));
+        }
+
+        if (update.AdditionalInfo?.HasWifi is bool hasWifi)
+        {
+            setParts.Add("has_wifi = @hasWifi");
+            parameters.Add(new MySqlParameter("@hasWifi", hasWifi));
+        }
+
+        if (update.AdditionalInfo?.HasParking is bool hasParking)
+        {
+            setParts.Add("has_parking = @hasParking");
+            parameters.Add(new MySqlParameter("@hasParking", hasParking));
+        }
+
+        if (update.AdditionalInfo?.HasPool is bool hasPool)
+        {
+            setParts.Add("has_pool = @hasPool");
+            parameters.Add(new MySqlParameter("@hasPool", hasPool));
+        }
+
+        if (update.AdditionalInfo?.HasGym is bool hasGym)
+        {
+            setParts.Add("has_gym = @hasGym");
+            parameters.Add(new MySqlParameter("@hasGym", hasGym));
+        }
+
+        if (setParts.Count == 0)
+        {
+            return false;
+        }
+
+        parameters.Add(new MySqlParameter("@id", id));
+        string query = $"UPDATE lodgings SET {string.Join(", ", setParts)} WHERE Id = @id";
+        int affected = await MySqlHelper.ExecuteNonQueryAsync(_config.db, query, parameters.ToArray());
+        return affected > 0;
     }
 
     public async Task DeleteLodging(int id)

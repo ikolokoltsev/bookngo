@@ -8,6 +8,7 @@ using server.Users.Repositories;
 using server.Bookings.Repositories;
 using server.Transports.Repositories;
 using server.Travels.Repositories;
+using server.Activities.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,6 +30,7 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IBookingRepository, BookingRepository>();
 builder.Services.AddScoped<ITransportRepository, TransportRepository>();
 builder.Services.AddScoped<ITravelRepository, TravelRepository>();
+builder.Services.AddScoped<IActivityRepository, ActivityRepository>();
 
 var dbPort = Environment.GetEnvironmentVariable("DB_PORT");
 Config config = new($"server=127.0.0.1;port={dbPort};uid=bookngo;pwd=bookngo;database=bookngo;");
@@ -87,6 +89,7 @@ async Task db_reset_to_default(Config config)
 
   await MySqlHelper.ExecuteNonQueryAsync(config.db, "DROP TABLE IF EXISTS travels");
   await MySqlHelper.ExecuteNonQueryAsync(config.db, "DROP TABLE IF EXISTS bookings");
+  await MySqlHelper.ExecuteNonQueryAsync(config.db, "DROP TABLE IF EXISTS activities");
   await MySqlHelper.ExecuteNonQueryAsync(config.db, "DROP TABLE IF EXISTS transports");
   await MySqlHelper.ExecuteNonQueryAsync(config.db, "DROP TABLE IF EXISTS users");
   await MySqlHelper.ExecuteNonQueryAsync(config.db, "DROP TABLE IF EXISTS lodgings");
@@ -143,6 +146,27 @@ async Task db_reset_to_default(Config config)
                                           """;
   await MySqlHelper.ExecuteNonQueryAsync(config.db, query_create_transports_table);
 
+  string query_create_activities_table = """
+                                          CREATE TABLE activities
+                                          (
+                                            id INT PRIMARY KEY AUTO_INCREMENT,
+                                            name VARCHAR(255) NOT NULL,
+                                            country VARCHAR(100) NOT NULL,
+                                            city VARCHAR(255) NOT NULL,
+                                            address VARCHAR(255) NOT NULL,
+                                            start_time DATETIME NOT NULL,
+                                            end_time DATETIME NOT NULL,
+                                            price DOUBLE NOT NULL,
+                                            activity_type VARCHAR(50) NOT NULL,
+                                            status VARCHAR(50) NOT NULL,
+                                            has_equipment BOOL NOT NULL DEFAULT 0,
+                                            has_instructor BOOL NOT NULL DEFAULT 0,
+                                            is_indoor BOOL NOT NULL DEFAULT 0,
+                                            description VARCHAR(255)
+                                          )
+                                          """;
+  await MySqlHelper.ExecuteNonQueryAsync(config.db, query_create_activities_table);
+
   string query_create_bookings_table = """
                                       CREATE TABLE bookings
                                       (
@@ -187,6 +211,14 @@ async Task db_reset_to_default(Config config)
                             ('Bus 88', 'Oslo', 'Bergen', '2025-01-15 13:00:00', '2025-01-15 20:30:00', 45.00, 'Bus', 'Delayed', 0, 0, 0, 'Weather delays expected')
                             """;
   await MySqlHelper.ExecuteNonQueryAsync(config.db, seed_transports);
+
+  string seed_activities = """
+                            INSERT INTO activities (name, country, city, address, start_time, end_time, price, activity_type, status, has_equipment, has_instructor, is_indoor, description) VALUES
+                            ('Scuba Dive Intro', 'Spain', 'Mallorca', '12 Harbor Pier', '2025-02-10 09:00:00', '2025-02-10 12:00:00', 120.00, 'Diving', 'Available', 1, 1, 0, 'Beginner-friendly dive with equipment included'),
+                            ('Surf Lesson', 'Portugal', 'Porto', '45 Atlantic Ave', '2025-03-05 14:00:00', '2025-03-05 16:00:00', 75.00, 'Surfing', 'Available', 1, 1, 0, 'Small group lesson with boards included'),
+                            ('Ski Day Pass', 'Sweden', 'Are', 'Ski Center 3', '2025-01-20 08:00:00', '2025-01-20 17:00:00', 95.00, 'Skiing', 'SoldOut', 0, 0, 0, 'Lift access for the full day')
+                            """;
+  await MySqlHelper.ExecuteNonQueryAsync(config.db, seed_activities);
 
   string seed_users = """
                           INSERT INTO users (name, email, admin, password) VALUES

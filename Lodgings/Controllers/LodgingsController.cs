@@ -72,6 +72,36 @@ public class LodgingsController(ILodgingRepository _lodgingRepository, Config _c
         }
     }
 
+    [HttpPatch]
+    [Route("{id}")]
+    public async Task<IActionResult> UpdateLodging(int id, [FromBody] LodgingUpdateRequest update)
+    {
+        if (!HttpContext.HasValidSession())
+        {
+            return Unauthorized("Session missing or expired.");
+        }
+
+        if (!await HttpContext.IsAdminAsync(_config))
+        {
+            return Forbid("Admin access required.");
+        }
+
+        if (update == null || !update.HasUpdates())
+        {
+            return BadRequest("No fields to update.");
+        }
+
+        try
+        {
+            var updated = await _lodgingRepository.UpdateLodging(id, update);
+            return updated ? Ok() : NotFound();
+        }
+        catch (Exception)
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError, "Can't update lodging");
+        }
+    }
+
     [HttpDelete]
     [Route("{id}")]
     public async Task<IActionResult> DeleteLodging(int id)

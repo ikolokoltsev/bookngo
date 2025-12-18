@@ -138,6 +138,94 @@ public class TransportRepository : ITransportRepository
         await MySqlHelper.ExecuteNonQueryAsync(_config.db, query, parameters);
     }
 
+    public async Task<bool> UpdateTransport(int id, TransportUpdateRequest update)
+    {
+        List<string> setParts = new();
+        List<MySqlParameter> parameters = new();
+
+        if (update.Name != null)
+        {
+            setParts.Add("Name = @name");
+            parameters.Add(new MySqlParameter("@name", update.Name));
+        }
+
+        if (update.Origin != null)
+        {
+            setParts.Add("Origin = @origin");
+            parameters.Add(new MySqlParameter("@origin", update.Origin));
+        }
+
+        if (update.Destination != null)
+        {
+            setParts.Add("Destination = @destination");
+            parameters.Add(new MySqlParameter("@destination", update.Destination));
+        }
+
+        if (update.DepartureTime.HasValue)
+        {
+            setParts.Add("departure_time = @departureTime");
+            parameters.Add(new MySqlParameter("@departureTime", update.DepartureTime.Value));
+        }
+
+        if (update.ArrivalTime.HasValue)
+        {
+            setParts.Add("arrival_time = @arrivalTime");
+            parameters.Add(new MySqlParameter("@arrivalTime", update.ArrivalTime.Value));
+        }
+
+        if (update.Price.HasValue)
+        {
+            setParts.Add("Price = @price");
+            parameters.Add(new MySqlParameter("@price", update.Price.Value));
+        }
+
+        if (update.Type.HasValue)
+        {
+            setParts.Add("transport_type = @type");
+            parameters.Add(new MySqlParameter("@type", update.Type.Value.ToString()));
+        }
+
+        if (update.Status.HasValue)
+        {
+            setParts.Add("Status = @status");
+            parameters.Add(new MySqlParameter("@status", update.Status.Value.ToString()));
+        }
+
+        if (update.Description != null)
+        {
+            setParts.Add("description = @description");
+            parameters.Add(new MySqlParameter("@description", update.Description));
+        }
+
+        if (update.Amenities?.HasWifi is bool hasWifi)
+        {
+            setParts.Add("has_wifi = @hasWifi");
+            parameters.Add(new MySqlParameter("@hasWifi", hasWifi));
+        }
+
+        if (update.Amenities?.HasFood is bool hasFood)
+        {
+            setParts.Add("has_food = @hasFood");
+            parameters.Add(new MySqlParameter("@hasFood", hasFood));
+        }
+
+        if (update.Amenities?.HasPremiumClass is bool hasPremiumClass)
+        {
+            setParts.Add("has_premium_class = @hasPremiumClass");
+            parameters.Add(new MySqlParameter("@hasPremiumClass", hasPremiumClass));
+        }
+
+        if (setParts.Count == 0)
+        {
+            return false;
+        }
+
+        parameters.Add(new MySqlParameter("@id", id));
+        string query = $"UPDATE transports SET {string.Join(", ", setParts)} WHERE Id = @id";
+        int affected = await MySqlHelper.ExecuteNonQueryAsync(_config.db, query, parameters.ToArray());
+        return affected > 0;
+    }
+
     public async Task DeleteTransport(int id)
     {
         const string query = "DELETE FROM transports WHERE Id = @id";
