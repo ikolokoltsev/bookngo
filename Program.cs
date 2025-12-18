@@ -6,6 +6,8 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using server.Users.Repositories;
 using server.Bookings.Repositories;
+using server.Transports.Repositories;
+using server.Travels.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,6 +27,8 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 builder.Services.AddScoped<ILodgingRepository, LodgingRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IBookingRepository, BookingRepository>();
+builder.Services.AddScoped<ITransportRepository, TransportRepository>();
+builder.Services.AddScoped<ITravelRepository, TravelRepository>();
 
 var dbPort = Environment.GetEnvironmentVariable("DB_PORT");
 Config config = new($"server=127.0.0.1;port={dbPort};uid=bookngo;pwd=bookngo;database=bookngo;");
@@ -79,7 +83,9 @@ app.Run();
 async Task db_reset_to_default(Config config)
 {
 
+  await MySqlHelper.ExecuteNonQueryAsync(config.db, "DROP TABLE IF EXISTS travels");
   await MySqlHelper.ExecuteNonQueryAsync(config.db, "DROP TABLE IF EXISTS bookings");
+  await MySqlHelper.ExecuteNonQueryAsync(config.db, "DROP TABLE IF EXISTS transports");
   await MySqlHelper.ExecuteNonQueryAsync(config.db, "DROP TABLE IF EXISTS users");
   await MySqlHelper.ExecuteNonQueryAsync(config.db, "DROP TABLE IF EXISTS lodgings");
 
@@ -115,6 +121,23 @@ async Task db_reset_to_default(Config config)
                                         """;
   await MySqlHelper.ExecuteNonQueryAsync(config.db, query_create_lodgings_table);
 
+  string query_create_transports_table = """
+                                          CREATE TABLE transports
+                                          (
+                                            id INT PRIMARY KEY AUTO_INCREMENT,
+                                            name VARCHAR(255) NOT NULL,
+                                            origin VARCHAR(100) NOT NULL,
+                                            destination VARCHAR(100) NOT NULL,
+                                            departure_time DATETIME NOT NULL,
+                                            arrival_time DATETIME NOT NULL,
+                                            price DOUBLE NOT NULL,
+                                            transport_type VARCHAR(50) NOT NULL,
+                                            status VARCHAR(50) NOT NULL,
+                                            description VARCHAR(255)
+                                          )
+                                          """;
+  await MySqlHelper.ExecuteNonQueryAsync(config.db, query_create_transports_table);
+
   string query_create_bookings_table = """
                                       CREATE TABLE bookings
                                       (
@@ -127,6 +150,21 @@ async Task db_reset_to_default(Config config)
                                       """;
   await MySqlHelper.ExecuteNonQueryAsync(config.db, query_create_bookings_table);
 
+  string query_create_travels_table = """
+                                      CREATE TABLE travels
+                                      (
+                                        id INT PRIMARY KEY AUTO_INCREMENT,
+                                        UserID INT NOT NULL,
+                                        TransportID INT NOT NULL,
+                                        created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                                        updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                                        UNIQUE KEY uq_travels_user_transport (UserID, TransportID),
+                                        FOREIGN KEY (UserID) REFERENCES users(id),
+                                        FOREIGN KEY (TransportID) REFERENCES transports(id)
+                                      )
+                                      """;
+  await MySqlHelper.ExecuteNonQueryAsync(config.db, query_create_travels_table);
+
   string seed_lodgings = """
                           INSERT INTO lodgings (name, price, country, city, address, rating, status, has_wifi, has_parking, has_pool, has_gym) VALUES
                           ('Seaside Escape', 120.00, 'USA', 'Miami', '123 Ocean View', 4.6, 'Available', 1, 1, 1, 0),
@@ -136,6 +174,14 @@ async Task db_reset_to_default(Config config)
                           ('Downtown Studio', 85.00, 'USA', 'Austin', '210 Center Ave', 4.3, 'PendingApproval', 1, 0, 0, 0)
                           """;
   await MySqlHelper.ExecuteNonQueryAsync(config.db, seed_lodgings);
+
+  string seed_transports = """
+                            INSERT INTO transports (name, origin, destination, departure_time, arrival_time, price, transport_type, status, description) VALUES
+                            ('Flight AB123', 'Stockholm', 'Berlin', '2025-01-10 09:30:00', '2025-01-10 11:45:00', 199.00, 'Flight', 'Available', 'Morning flight with carry-on included'),
+                            ('Train IC42', 'Gothenburg', 'Copenhagen', '2025-01-12 07:15:00', '2025-01-12 10:05:00', 79.50, 'Train', 'Available', 'Direct route with WiFi'),
+                            ('Bus 88', 'Oslo', 'Bergen', '2025-01-15 13:00:00', '2025-01-15 20:30:00', 45.00, 'Bus', 'Delayed', 'Weather delays expected')
+                            """;
+  await MySqlHelper.ExecuteNonQueryAsync(config.db, seed_transports);
 
   string seed_users = """
                           INSERT INTO users (name, email, admin, password) VALUES
@@ -148,4 +194,10 @@ async Task db_reset_to_default(Config config)
                           (1, 1)
                           """;
   await MySqlHelper.ExecuteNonQueryAsync(config.db, seed_bookings);
+
+  string seed_travels = """
+                                    INSERT INTO travels (UserID, TransportID) VALUES
+                                    (1, 1)
+                                    """;
+  await MySqlHelper.ExecuteNonQueryAsync(config.db, seed_travels);
 }
