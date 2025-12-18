@@ -90,7 +90,7 @@ public class LodgingRepository : ILodgingRepository
                 Address = reader.GetString(5),
                 Rating = reader.GetDouble(6),
                 Status = Enum.Parse<LodgingStatus>(reader.GetString(7)),
-                AdditionalInfo = new AdditionalInfo
+                AdditionalInfo = new LodgingAdditionalInfo
                 {
                     HasWifi = reader.GetBoolean(9),
                     HasParking = reader.GetBoolean(10),
@@ -110,7 +110,7 @@ public class LodgingRepository : ILodgingRepository
                                 (Name, Price, Country, City, Address, Rating, Status, has_wifi, has_parking, has_pool, has_gym, description)
                                 VALUES(@name, @price, @country, @city, @address, @rating, @status, @hasWifi, @hasParking, @hasPool, @hasGym, @description)
                                 """;
-        var additionalInfo = lodging.AdditionalInfo ?? new AdditionalInfo();
+        var additionalInfo = lodging.AdditionalInfo ?? new LodgingAdditionalInfo();
         var parameters = new MySqlParameter[]
         {
                 new("@name", lodging.Name),

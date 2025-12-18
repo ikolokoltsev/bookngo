@@ -133,6 +133,9 @@ async Task db_reset_to_default(Config config)
                                             price DOUBLE NOT NULL,
                                             transport_type VARCHAR(50) NOT NULL,
                                             status VARCHAR(50) NOT NULL,
+                                            has_wifi BOOL NOT NULL DEFAULT 0,
+                                            has_food BOOL NOT NULL DEFAULT 0,
+                                            has_premium_class BOOL NOT NULL DEFAULT 0,
                                             description VARCHAR(255)
                                           )
                                           """;
@@ -176,10 +179,10 @@ async Task db_reset_to_default(Config config)
   await MySqlHelper.ExecuteNonQueryAsync(config.db, seed_lodgings);
 
   string seed_transports = """
-                            INSERT INTO transports (name, origin, destination, departure_time, arrival_time, price, transport_type, status, description) VALUES
-                            ('Flight AB123', 'Stockholm', 'Berlin', '2025-01-10 09:30:00', '2025-01-10 11:45:00', 199.00, 'Flight', 'Available', 'Morning flight with carry-on included'),
-                            ('Train IC42', 'Gothenburg', 'Copenhagen', '2025-01-12 07:15:00', '2025-01-12 10:05:00', 79.50, 'Train', 'Available', 'Direct route with WiFi'),
-                            ('Bus 88', 'Oslo', 'Bergen', '2025-01-15 13:00:00', '2025-01-15 20:30:00', 45.00, 'Bus', 'Delayed', 'Weather delays expected')
+                            INSERT INTO transports (name, origin, destination, departure_time, arrival_time, price, transport_type, status, has_wifi, has_food, has_premium_class, description) VALUES
+                            ('Flight AB123', 'Stockholm', 'Berlin', '2025-01-10 09:30:00', '2025-01-10 11:45:00', 199.00, 'Flight', 'Available', 1, 1, 1, 'Morning flight with carry-on included'),
+                            ('Train IC42', 'Gothenburg', 'Copenhagen', '2025-01-12 07:15:00', '2025-01-12 10:05:00', 79.50, 'Train', 'Available', 1, 0, 0, 'Direct route with WiFi'),
+                            ('Bus 88', 'Oslo', 'Bergen', '2025-01-15 13:00:00', '2025-01-15 20:30:00', 45.00, 'Bus', 'Delayed', 0, 0, 0, 'Weather delays expected')
                             """;
   await MySqlHelper.ExecuteNonQueryAsync(config.db, seed_transports);
 

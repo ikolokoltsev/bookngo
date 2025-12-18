@@ -10,7 +10,7 @@ public enum LodgingStatus
     PendingApproval
 }
 
-public record AdditionalInfo
+public record LodgingAdditionalInfo
 {
     public bool HasWifi { get; init; }
     public bool HasParking { get; init; }
@@ -27,7 +27,7 @@ public class Lodging
     public required string Address { get; set; }
     public required double Rating { get; set; }
     public required LodgingStatus Status { get; set; }
-    public AdditionalInfo AdditionalInfo { get; set; } = new();
+    public LodgingAdditionalInfo AdditionalInfo { get; set; } = new();
     public string? Description { get; set; }
     // public string? 
     public required double Price { get; set; }
@@ -54,7 +54,7 @@ public record LodgingDetail
     public required string Address { get; init; }
     public required double Rating { get; init; }
     public required LodgingStatus Status { get; init; }
-    public AdditionalInfo AdditionalInfo { get; init; } = new();
+    public LodgingAdditionalInfo AdditionalInfo { get; init; } = new();
     public string? Description { get; init; }
     public required double Price { get; init; }
 }
