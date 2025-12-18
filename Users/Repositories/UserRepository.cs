@@ -56,7 +56,6 @@ public class UserRepository : IUserRepository
     public async Task<bool> GetAdminStatus(HttpContext ctx)
     {
         Debug.Assert(ctx != null);
-        var user = await Login.Get(_config, ctx);
 
         if(ctx.Session.IsAvailable)
         {
