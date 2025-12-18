@@ -5,6 +5,7 @@ using server.Lodgings.Repositories;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using server.Users.Repositories;
+using server.Bookings.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,6 +24,7 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 });
 builder.Services.AddScoped<ILodgingRepository, LodgingRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IBookingRepository, BookingRepository>();
 
 var dbPort = Environment.GetEnvironmentVariable("DB_PORT");
 Config config = new($"server=127.0.0.1;port={dbPort};uid=bookngo;pwd=bookngo;database=bookngo;");
