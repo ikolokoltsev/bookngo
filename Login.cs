@@ -53,4 +53,8 @@ static class Login
 
         return result;
     }
+    static public void Logout(HttpContext ctx)
+    {
+        ctx.Session.Clear();
+    }
 }
