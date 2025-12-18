@@ -63,6 +63,8 @@ app.MapGet("/me", async (Config config, HttpContext ctx) =>
 }
 );
 
+app.MapPost("/logout", Login.Logout);
+
 // app.MapPost("/login", Login.Post);
 app.MapPost("/login", async (Login.Post_Args creds, Config config, HttpContext ctx) =>
 {
