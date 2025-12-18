@@ -12,4 +12,8 @@ public class BookingController(IBookingRepository _bookingRepository) : Controll
 
     [HttpGet]
     public async Task<IEnumerable<Booking>> dbGetAllBookings() => await _bookingRepository.GetAllBookings();
+
+    [HttpGet]
+    [Route("mine")]
+    public async Task<IEnumerable<BookingInfo>> dbGetUserBookings() => await _bookingRepository.GetUserBookings(HttpContext);
 }
