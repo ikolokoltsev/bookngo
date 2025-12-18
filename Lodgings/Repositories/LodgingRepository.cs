@@ -103,21 +103,16 @@ public class LodgingRepository : ILodgingRepository
         return null;
     }
 
-    public async Task CreateLodging(Lodging lodging, HttpContext ctx)
+    public async Task CreateLodging(Lodging lodging)
     {
-        bool IsAdmin = false;
-        UserRepository userrepo = new UserRepository(_config);
-        IsAdmin = await userrepo.GetAdminStatus(ctx);
-        if(IsAdmin)
-        {
-            const string query = """
+        const string query = """
                                 INSERT INTO lodgings
                                 (Name, Price, Country, City, Address, Rating, Status, has_wifi, has_parking, has_pool, has_gym, description)
                                 VALUES(@name, @price, @country, @city, @address, @rating, @status, @hasWifi, @hasParking, @hasPool, @hasGym, @description)
                                 """;
-            var additionalInfo = lodging.AdditionalInfo ?? new AdditionalInfo();
-            var parameters = new MySqlParameter[]
-            {
+        var additionalInfo = lodging.AdditionalInfo ?? new AdditionalInfo();
+        var parameters = new MySqlParameter[]
+        {
                 new("@name", lodging.Name),
                 new("@price", lodging.Price),
                 new("@country", lodging.Country),
@@ -130,8 +125,15 @@ public class LodgingRepository : ILodgingRepository
                 new("@hasPool", additionalInfo.HasPool),
                 new("@hasGym", additionalInfo.HasGym),
                 new("@description", lodging.Description ?? (object)DBNull.Value)
-            };
-            await MySqlHelper.ExecuteNonQueryAsync(_config.db, query, parameters);
-        }
+        };
+        await MySqlHelper.ExecuteNonQueryAsync(_config.db, query, parameters);
+
+    }
+
+    public async Task DeleteLodging(int id)
+    {
+        const string query = "DELETE FROM lodgings WHERE Id = @id";
+        var parameters = new MySqlParameter[] { new("@id", id) };
+        await MySqlHelper.ExecuteNonQueryAsync(_config.db, query, parameters);
     }
 }

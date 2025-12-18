@@ -6,5 +6,6 @@ public interface ILodgingRepository
 {
     Task<IEnumerable<LodgingData>> GetAllLodgings(LodgingFilterQuery filter);
     Task<LodgingDetail?> GetLodgingById(int id);
-    Task CreateLodging(Lodging lodging, HttpContext ctx);
+    Task CreateLodging(Lodging lodging);
+    Task DeleteLodging(int id);
 }
