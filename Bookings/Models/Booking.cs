@@ -8,5 +8,6 @@ public record Booking()
 
 public record BookingInfo()
 {
-    public int LodgingID { get; set; }
+    public required string LodgingName { get; set; }
+    public required string LodgingAddress { get; set; }
 }
