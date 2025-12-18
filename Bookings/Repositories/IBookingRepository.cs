@@ -6,6 +6,6 @@ namespace server.Bookings.Repositories;
 public interface IBookingRepository
 {
     Task<IEnumerable<Booking>> GetAllBookings();
-    // Task<Booking?> GetUserBookings(int id);
-    // Task CreateBookings(BookingController.Post_Args booking, HttpContext ctx);
+    Task<IEnumerable<BookingInfo>> GetUserBookings(HttpContext ctx);
+    Task CreateBooking(BookingController.Post_Args booking, HttpContext ctx);
 }
