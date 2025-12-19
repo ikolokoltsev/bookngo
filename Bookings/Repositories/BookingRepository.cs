@@ -55,7 +55,6 @@ public class BookingRepository : IBookingRepository
 
                 using var reader = await MySqlHelper.ExecuteReaderAsync(_config.db, query, parameters);
 
-
                 while (await reader.ReadAsync())
                 {
                     bookingInfos.Add(new BookingInfo
