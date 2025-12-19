@@ -108,11 +108,11 @@ public class OrderRepository : IOrderRepository
                 new("@orderId", orderId),
                 new("@userId", userId)
             };
-            string inClause = BuildInClause("lodgingId", lodgingIds, lodgingParams);
+            string lodgingsQueryUpdate = GenerateServiceUpdateQuery("lodgingId", lodgingIds, lodgingParams);
             using var updateLodgings = new MySqlCommand($"""
                 UPDATE bookings
                 SET OrderID = @orderId
-                WHERE UserID = @userId AND OrderID IS NULL AND LodgingID IN ({inClause})
+                WHERE UserID = @userId AND OrderID IS NULL AND LodgingID IN ({lodgingsQueryUpdate})
                 """, connection);
             updateLodgings.Parameters.AddRange(lodgingParams.ToArray());
             await updateLodgings.ExecuteNonQueryAsync();
@@ -125,11 +125,11 @@ public class OrderRepository : IOrderRepository
                 new("@orderId", orderId),
                 new("@userId", userId)
             };
-            string inClause = BuildInClause("travelId", travelIds, travelParams);
+            string travelsQueryUpdate = GenerateServiceUpdateQuery("travelId", travelIds, travelParams);
             using var updateTravels = new MySqlCommand($"""
                 UPDATE travels
                 SET OrderID = @orderId
-                WHERE UserID = @userId AND OrderID IS NULL AND Id IN ({inClause})
+                WHERE UserID = @userId AND OrderID IS NULL AND Id IN ({travelsQueryUpdate})
                 """, connection);
             updateTravels.Parameters.AddRange(travelParams.ToArray());
             await updateTravels.ExecuteNonQueryAsync();
@@ -142,11 +142,11 @@ public class OrderRepository : IOrderRepository
                 new("@orderId", orderId),
                 new("@userId", userId)
             };
-            string inClause = BuildInClause("activityBookingId", activityBookingIds, activityParams);
+            string activityBookingQueryUpdate = GenerateServiceUpdateQuery("activityBookingId", activityBookingIds, activityParams);
             using var updateActivities = new MySqlCommand($"""
                 UPDATE activity_bookings
                 SET OrderID = @orderId
-                WHERE UserID = @userId AND OrderID IS NULL AND Id IN ({inClause})
+                WHERE UserID = @userId AND OrderID IS NULL AND Id IN ({activityBookingQueryUpdate})
                 """, connection);
             updateActivities.Parameters.AddRange(activityParams.ToArray());
             await updateActivities.ExecuteNonQueryAsync();
@@ -340,7 +340,7 @@ public class OrderRepository : IOrderRepository
         return items;
     }
 
-    private static string BuildInClause(string prefix, List<int> ids, List<MySqlParameter> parameters)
+    private static string GenerateServiceUpdateQuery(string prefix, List<int> ids, List<MySqlParameter> parameters)
     {
         var placeholders = new List<string>();
         for (int i = 0; i < ids.Count; i++)
