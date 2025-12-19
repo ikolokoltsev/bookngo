@@ -10,6 +10,7 @@ using server.Transports.Repositories;
 using server.Travels.Repositories;
 using server.Activities.Repositories;
 using server.ActivityBookings.Repositories;
+using server.Orders.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,6 +34,7 @@ builder.Services.AddScoped<ITransportRepository, TransportRepository>();
 builder.Services.AddScoped<ITravelRepository, TravelRepository>();
 builder.Services.AddScoped<IActivityRepository, ActivityRepository>();
 builder.Services.AddScoped<IActivityBookingRepository, ActivityBookingRepository>();
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 
 var dbPort = Environment.GetEnvironmentVariable("DB_PORT");
 Config config = new($"server=127.0.0.1;port={dbPort};uid=bookngo;pwd=bookngo;database=bookngo;");
@@ -89,9 +91,13 @@ app.Run();
 async Task db_reset_to_default(Config config)
 {
 
+  await MySqlHelper.ExecuteNonQueryAsync(config.db, "DROP TABLE IF EXISTS order_activity_bookings");
+  await MySqlHelper.ExecuteNonQueryAsync(config.db, "DROP TABLE IF EXISTS order_travels");
+  await MySqlHelper.ExecuteNonQueryAsync(config.db, "DROP TABLE IF EXISTS order_lodgings");
+  await MySqlHelper.ExecuteNonQueryAsync(config.db, "DROP TABLE IF EXISTS activity_bookings");
   await MySqlHelper.ExecuteNonQueryAsync(config.db, "DROP TABLE IF EXISTS travels");
   await MySqlHelper.ExecuteNonQueryAsync(config.db, "DROP TABLE IF EXISTS bookings");
-  await MySqlHelper.ExecuteNonQueryAsync(config.db, "DROP TABLE IF EXISTS activity_bookings");
+  await MySqlHelper.ExecuteNonQueryAsync(config.db, "DROP TABLE IF EXISTS orders");
   await MySqlHelper.ExecuteNonQueryAsync(config.db, "DROP TABLE IF EXISTS activities");
   await MySqlHelper.ExecuteNonQueryAsync(config.db, "DROP TABLE IF EXISTS transports");
   await MySqlHelper.ExecuteNonQueryAsync(config.db, "DROP TABLE IF EXISTS users");
@@ -108,6 +114,18 @@ async Task db_reset_to_default(Config config)
                                       )
                                       """;
   await MySqlHelper.ExecuteNonQueryAsync(config.db, query_create_users_table);
+
+  string query_create_orders_table = """
+                                     CREATE TABLE orders
+                                     (
+                                       id INT PRIMARY KEY AUTO_INCREMENT,
+                                       UserID INT NOT NULL,
+                                       total_amount DOUBLE NOT NULL,
+                                       created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                                       FOREIGN KEY (UserID) REFERENCES users(id)
+                                     )
+                                     """;
+  await MySqlHelper.ExecuteNonQueryAsync(config.db, query_create_orders_table);
 
   string query_create_lodgings_table = """
                                         CREATE TABLE lodgings
@@ -176,9 +194,11 @@ async Task db_reset_to_default(Config config)
                                                    id INT PRIMARY KEY AUTO_INCREMENT,
                                                    UserID INT NOT NULL,
                                                    ActivityID INT NOT NULL,
+                                                   OrderID INT NULL,
                                                    UNIQUE KEY uq_activity_bookings_user_activity (UserID, ActivityID),
                                                    FOREIGN KEY (UserID) REFERENCES users(id),
-                                                   FOREIGN KEY (ActivityID) REFERENCES activities(id)
+                                                   FOREIGN KEY (ActivityID) REFERENCES activities(id),
+                                                   FOREIGN KEY (OrderID) REFERENCES orders(id)
                                                  )
                                                  """;
   await MySqlHelper.ExecuteNonQueryAsync(config.db, query_create_activity_bookings_table);
@@ -188,9 +208,11 @@ async Task db_reset_to_default(Config config)
                                       (
                                         UserID INT NOT NULL,
                                         LodgingID INT NOT NULL,
+                                        OrderID INT NULL,
                                         PRIMARY KEY (UserID, LodgingID),
                                         FOREIGN KEY (UserID) REFERENCES users(id),
-                                        FOREIGN KEY (LodgingID) REFERENCES lodgings(id) 
+                                        FOREIGN KEY (LodgingID) REFERENCES lodgings(id),
+                                        FOREIGN KEY (OrderID) REFERENCES orders(id)
                                       )
                                       """;
   await MySqlHelper.ExecuteNonQueryAsync(config.db, query_create_bookings_table);
@@ -201,11 +223,13 @@ async Task db_reset_to_default(Config config)
                                         id INT PRIMARY KEY AUTO_INCREMENT,
                                         UserID INT NOT NULL,
                                         TransportID INT NOT NULL,
+                                        OrderID INT NULL,
                                         created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
                                         updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                                         UNIQUE KEY uq_travels_user_transport (UserID, TransportID),
                                         FOREIGN KEY (UserID) REFERENCES users(id),
-                                        FOREIGN KEY (TransportID) REFERENCES transports(id)
+                                        FOREIGN KEY (TransportID) REFERENCES transports(id),
+                                        FOREIGN KEY (OrderID) REFERENCES orders(id)
                                       )
                                       """;
   await MySqlHelper.ExecuteNonQueryAsync(config.db, query_create_travels_table);
@@ -242,21 +266,27 @@ async Task db_reset_to_default(Config config)
                           """;
   await MySqlHelper.ExecuteNonQueryAsync(config.db, seed_users);
 
+  string seed_orders = """
+                        INSERT INTO orders (id, UserID, total_amount) VALUES
+                        (1, 1, 439.00)
+                        """;
+  await MySqlHelper.ExecuteNonQueryAsync(config.db, seed_orders);
+
   string seed_bookings = """
-                          INSERT INTO bookings (UserID, LodgingID) VALUES
-                          (1, 1)
+                          INSERT INTO bookings (UserID, LodgingID, OrderID) VALUES
+                          (1, 1, 1)
                           """;
   await MySqlHelper.ExecuteNonQueryAsync(config.db, seed_bookings);
 
   string seed_travels = """
-                                    INSERT INTO travels (UserID, TransportID) VALUES
-                                    (1, 1)
+                                    INSERT INTO travels (UserID, TransportID, OrderID) VALUES
+                                    (1, 1, 1)
                                     """;
   await MySqlHelper.ExecuteNonQueryAsync(config.db, seed_travels);
 
   string seed_activity_bookings = """
-                                  INSERT INTO activity_bookings (UserID, ActivityID) VALUES
-                                  (1, 1)
+                                  INSERT INTO activity_bookings (UserID, ActivityID, OrderID) VALUES
+                                  (1, 1, 1)
                                   """;
   await MySqlHelper.ExecuteNonQueryAsync(config.db, seed_activity_bookings);
 }
