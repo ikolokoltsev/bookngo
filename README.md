@@ -13,3 +13,5 @@ GRANT ALL PRIVILEGES ON bookngo.\* TO 'bookngo'@'localhost';
 ## POST /login 
 
 ## GET /lodgings?SearchTerm=
+
+#Further commands can be found within the postman queries, which can be imported into postman
