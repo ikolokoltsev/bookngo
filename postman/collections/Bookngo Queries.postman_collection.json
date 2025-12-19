@@ -1,0 +1,1042 @@
+{
+  "info": {
+    "_postman_id": "89cb40d8-37b4-4fff-bb25-527d71ed3379",
+    "name": "Bookngo Queries",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Lodgings",
+      "item": [
+        {
+          "name": "GetAllLodgings",
+          "id": "b342cc61-f5fa-43dd-b619-db6e385a5086",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/lodgings",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "lodgings"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GetLogningById",
+          "id": "1df2f767-477f-439b-b97a-87a307ef68a0",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/lodgings/2",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "lodgings",
+                "2"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "CreateLodging",
+          "id": "8fa979de-7dd5-412e-ae0e-2fd6b70de492",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Harbor View Apartment\",\n    \"address\": \"12 Bay St\",\n    \"city\": \"Boston\",\n    \"country\": \"MA\",\n    \"rating\": 4.7,\n    \"status\": \"Available\",\n    \"price\": 155.0,\n    \"description\": \"Waterfront apartment with balcony and city views.\",\n    \"additionalInfo\": {\n        \"hasWifi\": true,\n        \"hasParking\": false,\n        \"hasPool\": false,\n        \"hasGym\": true\n    }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/lodgings",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "lodgings"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "CreateLodging 500",
+          "id": "ac06cf6f-e5ea-4136-aad5-27025128ca98",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"500 Test\",\n  \"address\": \"123 Some St\",\n  \"rating\": 4.5,\n  \"status\": \"Available\",\n  \"price\": 99.99,\n  \"description\": \"111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111\", \n  \"additionalInfo\": {\n    \"hasWifi\": true,\n    \"hasParking\": false,\n    \"hasPool\": false,\n    \"hasGym\": false\n  }\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/lodgings",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "lodgings"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "UpdateLodging",
+          "id": "3202f00b-0d19-4c02-b87c-fe6d28f3f0d4",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"price\": 140.0,\n  \"status\": \"booked\",\n  \"additionalInfo\": {\n    \"hasWifi\": true,\n    \"hasGym\": false\n  }\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/lodgings/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "lodgings",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Lodging",
+          "id": "f685fe34-8b45-4fe3-ba91-c17bb711aecc",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/lodgings/2",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "lodgings",
+                "2"
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "id": "0e2d4d2d-ada0-4b98-a787-adc1d025178a"
+    },
+    {
+      "name": "Activities",
+      "item": [
+        {
+          "name": "GetAllActivities",
+          "id": "6f565344-d723-47c1-8e1e-e4c78895ef2c",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/activities",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "activities"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GetActivityById",
+          "id": "c8a6fb42-fa2d-4a61-ab40-c49b1b57c82d",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/activities/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "activities",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "CreateActivity",
+          "id": "645bad9f-e5fa-4e5c-a8ab-8461f3b9d689",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Sunset Surf Lesson\",\n  \"country\": \"Portugal\",\n  \"city\": \"Porto\",\n  \"address\": \"45 Atlantic Ave\",\n  \"startTime\": \"2025-03-05T14:00:00\",\n  \"endTime\": \"2025-03-05T16:00:00\",\n  \"price\": 75.0,\n  \"type\": \"surfing\",\n  \"status\": \"available\",\n  \"additionalInfo\": {\n    \"hasEquipment\": true,\n    \"hasInstructor\": true,\n    \"isIndoor\": false\n  },\n  \"description\": \"Small group lesson with boards included\"\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/activities",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "activities"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "CreateActivity 500",
+          "id": "36f5558f-c311-4425-a2a1-84f0ef888001",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\",\n  \"country\": \"BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB\",\n  \"city\": \"CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC\",\n  \"address\": \"DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD\",\n  \"startTime\": \"2025-03-05T14:00:00\",\n  \"endTime\": \"2025-03-05T16:00:00\",\n  \"price\": 75.0,\n  \"type\": \"surfing\",\n  \"status\": \"available\",\n  \"additionalInfo\": {\n    \"hasEquipment\": true,\n    \"hasInstructor\": true,\n    \"isIndoor\": false\n  },\n  \"description\": \"Intentionally oversized fields to trigger DB error.\"\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/activities",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "activities"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "UpdateActivity",
+          "id": "8eedbd08-e1a5-44e1-a6d1-a75370ae683c",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"address\": \"99 Beach Rd\",\n  \"price\": 89.0,\n  \"additionalInfo\": {\n    \"hasInstructor\": true,\n    \"isIndoor\": false\n  }\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/activities/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "activities",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Activity",
+          "id": "93ba24a4-5fcb-41d5-9ff8-b8220deb9be4",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/activities/2",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "activities",
+                "2"
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "id": "6145a14e-8123-4305-9b66-c17adb7af198"
+    },
+    {
+      "name": "Booking",
+      "item": [
+        {
+          "name": "GetAllBookings",
+          "id": "1547061b-4287-4d98-b658-b2f08a5e0b62",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/bookings",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "bookings"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Booking",
+          "id": "50608da8-d08b-43ee-86bc-74c99b59678e",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"LodgingID\": 2\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/bookings",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "bookings"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GetMyBookings",
+          "id": "9d3f43d8-f5a0-483e-92ad-66186f171a43",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/bookings/mine",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "bookings",
+                "mine"
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "id": "2b14fcca-68e7-4666-b6f7-95b195304cd1"
+    },
+    {
+      "name": "Travels",
+      "item": [
+        {
+          "name": "GetAllTravels",
+          "id": "8346e929-5886-47d8-b324-54e3340e4c46",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/travels",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "travels"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Travel",
+          "id": "9d5c0908-a866-4621-9f21-1e9085c41683",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"transportID\": 2\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/travels",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "travels"
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "id": "67b4d275-e513-4215-8c4c-fbb009870628"
+    },
+    {
+      "name": "Activity Bookings",
+      "item": [
+        {
+          "name": "GetAllActivityBookings",
+          "id": "da4cefb6-48d7-4a5a-91e0-1fcaa9ec72db",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/activity-bookings",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "activity-bookings"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Activity Booking",
+          "id": "05a74832-837e-4999-90c2-727733aa330c",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"activityID\": 3\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/activity-bookings",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "activity-bookings"
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "id": "07c439b9-4f49-48dd-a364-0664d494ea59"
+    },
+    {
+      "name": "FilterSearchTerms",
+      "item": [
+        {
+          "name": "Filter SearchTerm Price",
+          "id": "96ad9f08-07fe-4c9d-a04d-a371bf87f23e",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "localhost:5218/lodgings?MaxPrice=95",
+              "host": [
+                "localhost"
+              ],
+              "port": "5218",
+              "path": [
+                "lodgings"
+              ],
+              "query": [
+                {
+                  "key": "MaxPrice",
+                  "value": "95"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Filter SearchTerm Status",
+          "id": "40a26b6d-f7ff-49f5-8a80-9d101047a4d6",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "localhost:5218/lodgings?Status=booked",
+              "host": [
+                "localhost"
+              ],
+              "port": "5218",
+              "path": [
+                "lodgings"
+              ],
+              "query": [
+                {
+                  "key": "Status",
+                  "value": "booked"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Filter SearchTerm alot",
+          "id": "4f347b27-1bc9-403d-80c6-b93fd328a2ec",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "localhost:5218/lodgings?MinPrice=85&MaxPrice=2000&MinRating=4.8&Status=Booked",
+              "host": [
+                "localhost"
+              ],
+              "port": "5218",
+              "path": [
+                "lodgings"
+              ],
+              "query": [
+                {
+                  "key": "MinPrice",
+                  "value": "85"
+                },
+                {
+                  "key": "MaxPrice",
+                  "value": "2000"
+                },
+                {
+                  "key": "MinRating",
+                  "value": "4.8"
+                },
+                {
+                  "key": "Status",
+                  "value": "Booked"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Filter SearchTerm name/adress",
+          "id": "608d5052-ba21-41db-970b-3061a36c3c56",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "localhost:5218/lodgings?SearchTerm=123",
+              "host": [
+                "localhost"
+              ],
+              "port": "5218",
+              "path": [
+                "lodgings"
+              ],
+              "query": [
+                {
+                  "key": "SearchTerm",
+                  "value": "123"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "id": "d4efff6c-40fe-458e-a5f4-7cd242fe5ccc"
+    },
+    {
+      "name": "Transport",
+      "item": [
+        {
+          "name": "GetAllTransports",
+          "id": "338fe76b-9a88-40b0-aa34-92229d3f8afd",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/transports",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "transports"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GetTransportById",
+          "id": "5d21efa7-b8d3-46b5-86d1-007a55790c3e",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/transports/2",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "transports",
+                "2"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "CreateTransport",
+          "id": "c13f7c56-700f-45c1-b96f-4b93604d183b",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Flight AB123\",\n  \"origin\": \"Stockholm\",\n  \"destination\": \"Berlin\",\n  \"departureTime\": \"2025-01-10T09:30:00\",\n  \"arrivalTime\": \"2025-01-10T11:45:00\",\n  \"price\": 199.0,\n  \"type\": \"flight\",\n  \"status\": \"available\",\n  \"amenities\": {\n    \"hasWifi\": true,\n    \"hasFood\": true,\n    \"hasPremiumClass\": true\n  },\n  \"description\": \"Morning flight with carry-on included\"\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/transports",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "transports"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "CreateTransport 500",
+          "id": "267ec7b6-38bb-4eb0-8117-bc0f1cfcb6a5",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\",\n  \"origin\": \"BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB\",\n  \"destination\": \"CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC\",\n  \"departureTime\": \"2025-01-10T09:30:00\",\n  \"arrivalTime\": \"2025-01-10T11:45:00\",\n  \"price\": 199.0,\n  \"type\": \"flight\",\n  \"status\": \"available\",\n  \"amenities\": {\n    \"hasWifi\": true,\n    \"hasFood\": true,\n    \"hasPremiumClass\": true\n  },\n  \"description\": \"Intentionally oversized fields to trigger DB error.\"\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/transports",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "transports"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "UpdateTransport",
+          "id": "61faa73c-4d3e-4caa-9d9c-b336259c7d3b",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"departureTime\": \"2025-01-10T10:30:00\",\n  \"status\": \"delayed\",\n  \"amenities\": {\n    \"hasFood\": true,\n    \"hasPremiumClass\": false\n  }\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/transport/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "transport",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Transport",
+          "id": "1a65ab51-b3e4-4143-8d0d-66be6f54914d",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/transports/2",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "transports",
+                "2"
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "id": "55cfb508-84bb-42c6-b2f5-d1bfc1d3dd2e"
+    },
+    {
+      "name": "Orders",
+      "item": [
+        {
+          "name": "Get Mine Orders",
+          "id": "5fa058b3-84db-48c8-81d9-c4abb2ade5ab",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/orders/mine",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "orders",
+                "mine"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Order by ID",
+          "id": "e37e878c-cee5-4a95-b7c9-5a3ee648f461",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/orders/2",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "orders",
+                "2"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Order",
+          "id": "353d70fe-dd91-4dec-9805-025aa1e254de",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"lodgingIDs\": [\n        1\n    ],\n    \"travelIDs\": [\n        1\n    ],\n    \"activityBookingIDs\": [\n        1\n    ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/orders",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "orders"
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "id": "8dbfb515-2399-418d-9aa9-41e84ebcfcf1"
+    },
+    {
+      "name": "Initial Delete Request",
+      "id": "c92ebcbe-ea66-4630-ad92-39eedd29543e",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/db",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "db"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Create User",
+      "id": "0fa1dff7-d96f-4e19-bc9a-b4fc93e687d2",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n\"name\": \"Azar\",\r\n\"email\": \"Azar@email.com\",\r\n\"admin\": false,\r\n\"password\": \"h3mligt\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/users",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "users"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Log in",
+      "id": "a6fde423-e81e-4c9a-be6b-eadec1928a1b",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n\"email\": \"Azar@email.com\",\r\n\"password\": \"h3mligt\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/login",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "login"
+          ]
+        }
+      },
+      "response": [
+        {
+          "id": "71ff1c67-2feb-4933-9318-edbb432ee27b",
+          "name": "Log in",
+          "originalRequest": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n\"email\": \"Azar@email.com\",\r\n\"password\": \"h3mligt\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "login"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Date",
+              "value": "Fri, 19 Dec 2025 10:27:05 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "Kestrel"
+            },
+            {
+              "key": "Transfer-Encoding",
+              "value": "chunked"
+            }
+          ],
+          "cookie": [],
+          "body": "\"Logged in!\""
+        }
+      ]
+    },
+    {
+      "name": "Log in Admin",
+      "id": "45ad7dde-48e8-4622-bb0d-025b0370162d",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n\"email\": \"email\",\r\n\"password\": \"s3cret\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/login",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "login"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get login info",
+      "id": "0806dfea-1e45-4343-af26-111642e9bd21",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/me",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "me"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Check admin status",
+      "id": "a07d5160-4214-458a-91b8-bb75c9aff8c6",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/users/isadmin",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "users",
+            "isadmin"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Logout",
+      "id": "383cea7e-4ae0-4ea2-89be-94f64cf87361",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/logout",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "logout"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
