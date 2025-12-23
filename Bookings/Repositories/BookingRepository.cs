@@ -36,9 +36,9 @@ public class BookingRepository : IBookingRepository
     {
         var bookingInfos = new List<BookingInfo>();
 
-        if(ctx.Session.IsAvailable)
+        if (ctx.Session.IsAvailable)
         {
-            if(ctx.Session.Keys.Contains("user_id"))
+            if (ctx.Session.Keys.Contains("user_id"))
             {
                 // const string query = "SELECT LodgingID FROM bookings WHERE LodgingID = @id";
                 const string query = """
@@ -54,7 +54,6 @@ public class BookingRepository : IBookingRepository
                 };
 
                 using var reader = await MySqlHelper.ExecuteReaderAsync(_config.db, query, parameters);
-                
 
                 while (await reader.ReadAsync())
                 {
@@ -70,11 +69,11 @@ public class BookingRepository : IBookingRepository
         return bookingInfos;
     }
 
-    public async Task CreateBooking(BookingController.Post_Args lodging, HttpContext ctx)
+    public async Task CreateBooking(BookingController.BookingRequest lodging, HttpContext ctx)
     {
-        if(ctx.Session.IsAvailable)
+        if (ctx.Session.IsAvailable)
         {
-            if(ctx.Session.Keys.Contains("user_id"))
+            if (ctx.Session.Keys.Contains("user_id"))
             {
                 string query = "INSERT INTO bookings(UserID, LodgingID) VALUES(@UserID, @LodgingID)";
                 var parameters = new MySqlParameter[]

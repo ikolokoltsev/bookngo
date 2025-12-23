@@ -10,7 +10,7 @@ public enum LodgingStatus
     PendingApproval
 }
 
-public record AdditionalInfo
+public record LodgingAdditionalInfo
 {
     public bool HasWifi { get; init; }
     public bool HasParking { get; init; }
@@ -22,10 +22,12 @@ public class Lodging
 {
     public int Id { get; set; }
     public required string Name { get; set; }
+    public required string Country { get; set; }
+    public required string City { get; set; }
     public required string Address { get; set; }
     public required double Rating { get; set; }
     public required LodgingStatus Status { get; set; }
-    public AdditionalInfo AdditionalInfo { get; set; } = new();
+    public LodgingAdditionalInfo AdditionalInfo { get; set; } = new();
     public string? Description { get; set; }
     // public string? 
     public required double Price { get; set; }
@@ -35,6 +37,8 @@ public record LodgingData
 {
     public int Id { get; init; }
     public required string Name { get; init; }
+    public required string Country { get; init; }
+    public required string City { get; init; }
     public required string Address { get; init; }
     public required double Rating { get; init; }
     public required LodgingStatus Status { get; init; }
@@ -45,12 +49,49 @@ public record LodgingDetail
 {
     public int Id { get; init; }
     public required string Name { get; init; }
+    public required string Country { get; init; }
+    public required string City { get; init; }
     public required string Address { get; init; }
     public required double Rating { get; init; }
     public required LodgingStatus Status { get; init; }
-    public AdditionalInfo AdditionalInfo { get; init; } = new();
+    public LodgingAdditionalInfo AdditionalInfo { get; init; } = new();
     public string? Description { get; init; }
     public required double Price { get; init; }
+}
+
+public record LodgingAdditionalInfoPatch
+{
+    public bool? HasWifi { get; init; }
+    public bool? HasParking { get; init; }
+    public bool? HasPool { get; init; }
+    public bool? HasGym { get; init; }
+
+    public bool HasUpdates() =>
+        HasWifi.HasValue || HasParking.HasValue || HasPool.HasValue || HasGym.HasValue;
+}
+
+public class LodgingUpdateRequest
+{
+    public string? Name { get; set; }
+    public string? Country { get; set; }
+    public string? City { get; set; }
+    public string? Address { get; set; }
+    public double? Rating { get; set; }
+    public LodgingStatus? Status { get; set; }
+    public string? Description { get; set; }
+    public double? Price { get; set; }
+    public LodgingAdditionalInfoPatch? AdditionalInfo { get; set; }
+
+    public bool HasUpdates() =>
+        Name != null ||
+        Country != null ||
+        City != null ||
+        Address != null ||
+        Rating.HasValue ||
+        Status.HasValue ||
+        Description != null ||
+        Price.HasValue ||
+        (AdditionalInfo != null && AdditionalInfo.HasUpdates());
 }
 
 public class LodgingFilterQuery
@@ -59,5 +100,8 @@ public class LodgingFilterQuery
       public double? MaxPrice { get; set; }
       public double? MinRating { get; set; }  
       public LodgingStatus? Status { get; set; }
+      public string? Country { get; set; }
+      public string? City { get; set; }
+      public string? Address { get; set; }
       public string? SearchTerm { get; set; }
 }

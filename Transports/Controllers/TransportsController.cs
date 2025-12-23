@@ -1,16 +1,16 @@
-using server.Lodgings.Models;
-using server.Lodgings.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using server;
+using server.Transports.Models;
+using server.Transports.Repositories;
 
-namespace server.Lodgings.Controllers;
+namespace server.Transports.Controllers;
 
 [ApiController]
-[Route("lodgings")]
-public class LodgingsController(ILodgingRepository _lodgingRepository, Config _config) : ControllerBase
+[Route("transports")]
+public class TransportsController(ITransportRepository _transportRepository, Config _config) : ControllerBase
 {
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<LodgingData>>> GetLodgings([FromQuery] LodgingFilterQuery filter)
+    public async Task<ActionResult<IEnumerable<TransportData>>> GetTransports([FromQuery] TransportFilterQuery filter)
     {
         if (!HttpContext.HasValidSession())
         {
@@ -19,18 +19,18 @@ public class LodgingsController(ILodgingRepository _lodgingRepository, Config _c
 
         try
         {
-            IEnumerable<LodgingData> lodgings = await _lodgingRepository.GetAllLodgings(filter);
-            return Ok(lodgings);
+            var transports = await _transportRepository.GetAllTransports(filter);
+            return Ok(transports);
         }
         catch (Exception)
         {
-            return StatusCode(StatusCodes.Status500InternalServerError, "Can't get lodgings");
+            return StatusCode(StatusCodes.Status500InternalServerError, "Can't get transports");
         }
     }
 
     [HttpGet]
     [Route("{id}")]
-    public async Task<ActionResult<LodgingDetail?>> GetLodgingById(int id)
+    public async Task<ActionResult<TransportDetail?>> GetTransportById(int id)
     {
         if (!HttpContext.HasValidSession())
         {
@@ -39,17 +39,17 @@ public class LodgingsController(ILodgingRepository _lodgingRepository, Config _c
 
         try
         {
-            var lodging = await _lodgingRepository.GetLodgingById(id);
-            return Ok(lodging);
+            var transport = await _transportRepository.GetTransportById(id);
+            return Ok(transport);
         }
         catch (Exception)
         {
-            return StatusCode(StatusCodes.Status500InternalServerError, "Can't get lodging");
+            return StatusCode(StatusCodes.Status500InternalServerError, "Can't get transport");
         }
     }
 
     [HttpPost]
-    public async Task<IActionResult> PostLodging([FromBody] Lodging lodging)
+    public async Task<IActionResult> PostTransport([FromBody] Transport transport)
     {
         if (!HttpContext.HasValidSession())
         {
@@ -63,18 +63,18 @@ public class LodgingsController(ILodgingRepository _lodgingRepository, Config _c
 
         try
         {
-            await _lodgingRepository.CreateLodging(lodging);
+            await _transportRepository.CreateTransport(transport);
             return Ok();
         }
         catch (Exception)
         {
-            return StatusCode(StatusCodes.Status500InternalServerError, "Can't create lodging");
+            return StatusCode(StatusCodes.Status500InternalServerError, "Can't create transport");
         }
     }
 
     [HttpPatch]
     [Route("{id}")]
-    public async Task<IActionResult> UpdateLodging(int id, [FromBody] LodgingUpdateRequest update)
+    public async Task<IActionResult> UpdateTransport(int id, [FromBody] TransportUpdateRequest update)
     {
         if (!HttpContext.HasValidSession())
         {
@@ -93,18 +93,18 @@ public class LodgingsController(ILodgingRepository _lodgingRepository, Config _c
 
         try
         {
-            var updated = await _lodgingRepository.UpdateLodging(id, update);
+            var updated = await _transportRepository.UpdateTransport(id, update);
             return updated ? Ok() : NotFound();
         }
         catch (Exception)
         {
-            return StatusCode(StatusCodes.Status500InternalServerError, "Can't update lodging");
+            return StatusCode(StatusCodes.Status500InternalServerError, "Can't update transport");
         }
     }
 
     [HttpDelete]
     [Route("{id}")]
-    public async Task<IActionResult> DeleteLodging(int id)
+    public async Task<IActionResult> DeleteTransport(int id)
     {
         if (!HttpContext.HasValidSession())
         {
@@ -118,12 +118,12 @@ public class LodgingsController(ILodgingRepository _lodgingRepository, Config _c
 
         try
         {
-            await _lodgingRepository.DeleteLodging(id);
+            await _transportRepository.DeleteTransport(id);
             return Ok();
         }
         catch (Exception)
         {
-            return StatusCode(StatusCodes.Status500InternalServerError, "Can't delete lodging");
+            return StatusCode(StatusCodes.Status500InternalServerError, "Can't delete transport");
         }
     }
 }
