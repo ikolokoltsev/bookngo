@@ -10,6 +10,8 @@ public enum LodgingStatus
     PendingApproval
 }
 
+// TODO: implement lodging type(hotel room, vila, apartment)
+
 public record LodgingAdditionalInfo
 {
     public bool HasWifi { get; init; }
