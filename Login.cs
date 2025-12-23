@@ -43,7 +43,7 @@ static class Login
  public static async Task<bool> Post(Post_Args credentials, Config config, HttpContext ctx)
 {
     const int MAX_ATTEMPTS = 5;
-    bool result = false;
+    
 
     string query = """
         SELECT id, password, failed_attempts, locked_until
