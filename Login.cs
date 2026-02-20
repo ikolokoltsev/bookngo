@@ -32,8 +32,8 @@ static class Login
         return result;
     }
 
-    public record Post_Args(string Email, string Password);
-    public static async Task<bool> Post(Post_Args credentials, Config config, HttpContext ctx)
+    public record LoginRequest(string Email, string Password);
+    public static async Task<bool> Post(LoginRequest credentials, Config config, HttpContext ctx)
     {
         bool result = false;
         string query = "SELECT id FROM users WHERE email = @email AND password = @password";

@@ -8,7 +8,7 @@ namespace server.Bookings.Controllers;
 [Route("bookings")]
 public class BookingController(IBookingRepository _bookingRepository) : ControllerBase
 {
-    public record Post_Args(int LodgingID);
+    public record BookingRequest(int LodgingID);
 
     [HttpGet]
     public async Task<IEnumerable<Booking>> dbGetAllBookings() => await _bookingRepository.GetAllBookings();
@@ -18,5 +18,5 @@ public class BookingController(IBookingRepository _bookingRepository) : Controll
     public async Task<IEnumerable<BookingInfo>> dbGetUserBookings() => await _bookingRepository.GetUserBookings(HttpContext);
 
     [HttpPost]
-    public async Task dbCreateBooking(Post_Args lodging) => await _bookingRepository.CreateBooking(lodging, HttpContext);
+    public async Task dbCreateBooking(BookingRequest lodging) => await _bookingRepository.CreateBooking(lodging, HttpContext);
 }

@@ -1,16 +1,16 @@
-using server.Lodgings.Models;
-using server.Lodgings.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using server;
+using server.Activities.Models;
+using server.Activities.Repositories;
 
-namespace server.Lodgings.Controllers;
+namespace server.Activities.Controllers;
 
 [ApiController]
-[Route("lodgings")]
-public class LodgingsController(ILodgingRepository _lodgingRepository, Config _config) : ControllerBase
+[Route("activities")]
+public class ActivitiesController(IActivityRepository _activityRepository, Config _config) : ControllerBase
 {
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<LodgingData>>> GetLodgings([FromQuery] LodgingFilterQuery filter)
+    public async Task<ActionResult<IEnumerable<ActivityData>>> GetActivities([FromQuery] ActivityFilterQuery filter)
     {
         if (!HttpContext.HasValidSession())
         {
@@ -19,18 +19,18 @@ public class LodgingsController(ILodgingRepository _lodgingRepository, Config _c
 
         try
         {
-            IEnumerable<LodgingData> lodgings = await _lodgingRepository.GetAllLodgings(filter);
-            return Ok(lodgings);
+            var activities = await _activityRepository.GetAllActivities(filter);
+            return Ok(activities);
         }
         catch (Exception)
         {
-            return StatusCode(StatusCodes.Status500InternalServerError, "Can't get lodgings");
+            return StatusCode(StatusCodes.Status500InternalServerError, "Can't get activities");
         }
     }
 
     [HttpGet]
     [Route("{id}")]
-    public async Task<ActionResult<LodgingDetail?>> GetLodgingById(int id)
+    public async Task<ActionResult<ActivityDetail?>> GetActivityById(int id)
     {
         if (!HttpContext.HasValidSession())
         {
@@ -39,17 +39,17 @@ public class LodgingsController(ILodgingRepository _lodgingRepository, Config _c
 
         try
         {
-            var lodging = await _lodgingRepository.GetLodgingById(id);
-            return Ok(lodging);
+            var activity = await _activityRepository.GetActivityById(id);
+            return Ok(activity);
         }
         catch (Exception)
         {
-            return StatusCode(StatusCodes.Status500InternalServerError, "Can't get lodging");
+            return StatusCode(StatusCodes.Status500InternalServerError, "Can't get activity");
         }
     }
 
     [HttpPost]
-    public async Task<IActionResult> PostLodging([FromBody] Lodging lodging)
+    public async Task<IActionResult> PostActivity([FromBody] Activity activity)
     {
         if (!HttpContext.HasValidSession())
         {
@@ -63,18 +63,18 @@ public class LodgingsController(ILodgingRepository _lodgingRepository, Config _c
 
         try
         {
-            await _lodgingRepository.CreateLodging(lodging);
+            await _activityRepository.CreateActivity(activity);
             return Ok();
         }
         catch (Exception)
         {
-            return StatusCode(StatusCodes.Status500InternalServerError, "Can't create lodging");
+            return StatusCode(StatusCodes.Status500InternalServerError, "Can't create activity");
         }
     }
 
     [HttpPatch]
     [Route("{id}")]
-    public async Task<IActionResult> UpdateLodging(int id, [FromBody] LodgingUpdateRequest update)
+    public async Task<IActionResult> UpdateActivity(int id, [FromBody] ActivityUpdateRequest update)
     {
         if (!HttpContext.HasValidSession())
         {
@@ -93,18 +93,18 @@ public class LodgingsController(ILodgingRepository _lodgingRepository, Config _c
 
         try
         {
-            var updated = await _lodgingRepository.UpdateLodging(id, update);
+            var updated = await _activityRepository.UpdateActivity(id, update);
             return updated ? Ok() : NotFound();
         }
         catch (Exception)
         {
-            return StatusCode(StatusCodes.Status500InternalServerError, "Can't update lodging");
+            return StatusCode(StatusCodes.Status500InternalServerError, "Can't update activity");
         }
     }
 
     [HttpDelete]
     [Route("{id}")]
-    public async Task<IActionResult> DeleteLodging(int id)
+    public async Task<IActionResult> DeleteActivity(int id)
     {
         if (!HttpContext.HasValidSession())
         {
@@ -118,12 +118,12 @@ public class LodgingsController(ILodgingRepository _lodgingRepository, Config _c
 
         try
         {
-            await _lodgingRepository.DeleteLodging(id);
+            await _activityRepository.DeleteActivity(id);
             return Ok();
         }
         catch (Exception)
         {
-            return StatusCode(StatusCodes.Status500InternalServerError, "Can't delete lodging");
+            return StatusCode(StatusCodes.Status500InternalServerError, "Can't delete activity");
         }
     }
 }

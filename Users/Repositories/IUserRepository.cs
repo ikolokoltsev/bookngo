@@ -7,6 +7,6 @@ namespace server.Users.Repositories;
 public interface IUserRepository
 {
     Task<IEnumerable<User>> GetAllUsers();
-    Task CreateUser(UserController.Post_Args user, HttpContext ctx);
+    Task CreateUser(UserController.UserRequest user, HttpContext ctx);
     Task<bool> GetAdminStatus(HttpContext ctx);
 }
